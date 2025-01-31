@@ -1,0 +1,49 @@
+<div class="container">
+  <h1>Gestion des utilisateurs</h1>
+  <div class="d-flex justify-content-end mb-3"> <!-- Utilisez justify-content-end pour aligner à droite -->
+    <button class="btn btn-add">
+      <i class="fas fa-plus"></i> Ajouter un utilisateur
+    </button>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <input type="checkbox" (change)="toggleSelectAll($event)" />
+        </th>
+        <th>Nom</th>
+        <th>ID de l'utilisateur</th>
+        <th>Email</th>
+        <th>assignation</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>
+          <input type="checkbox" [(ngModel)]="user.selected" />
+        </td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.cardId }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <span [ngClass]="{'text-success': user.assignation === 'assigner une carte', 'text-danger': user.assignation === 'désassigner la carte'}">
+            {{ user.assignation }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-warning">
+            <i class="fas fa-pencil-alt"></i> <!-- Icône Modifier -->
+          </button>
+          <button class="btn btn-danger">
+            <i class="fas fa-trash"></i> <!-- Icône Supprimer -->
+          </button>
+          <button class="btn btn-secondary">
+            <i class="fas fa-ban"></i> <!-- Icône Bloquer -->
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
