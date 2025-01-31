@@ -1,0 +1,24 @@
+/* top-navbar.component.css */
+.navbar {
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .user-info {
+    border-right: 2px solid #dee2e6;
+    padding-right: 1rem;
+  }
+  
+  .user-icon:hover {
+    color: #274C77 !important;
+    cursor: pointer;
+  }
+  
+  .navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.8px;
+  }
+  .sidebar-toggle-icon {
+    color: #274C77 !important;
+  }
+  

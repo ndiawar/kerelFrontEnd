@@ -1,0 +1,31 @@
+.active {
+    background-color: #274C77 !important;
+    color: #FFFFFF !important;
+    font-weight: 500;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .nav-link {
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #FFFFFF;
+    color: #274C77;
+    font-weight: 400;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .nav-link:hover {
+    background-color: #274C77;
+    color: #FFFFFF;
+  }
+
+  /* Contenu principal de la sidebar */
+.sidebar-content {
+  flex: 1; /* Cette section prend tout l'espace disponible */
+}
+

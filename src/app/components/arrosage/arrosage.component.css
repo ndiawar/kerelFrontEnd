@@ -1,0 +1,34 @@
+.custom-card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-left: #007bff 8px solid;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-body .d-flex {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.card-body .d-flex i {
+  font-size: 1.2rem;
+  color: #007bff;
+}
+
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .custom-input {
+    border-radius: 20px; /* Bordures arrondies */
+  }
+  
+  .table {
+    margin-top: 2rem;
+  }
+  

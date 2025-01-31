@@ -1,0 +1,39 @@
+<nav class="d-flex flex-column mt-5 bg-light" style="width: 350px; height: 100vh;">
+    <div class="sidebar-content nav flex-column nav-pills">
+      <a 
+        class="nav-link" 
+        routerLink="/dashboard" 
+        routerLinkActive="active"
+      >
+        Dashboard
+      </a>
+      <a 
+        class="nav-link" 
+        routerLink="/utilisateurs" 
+        routerLinkActive="active"
+      >
+        Utilisateurs
+      </a>
+      <a 
+        class="nav-link" 
+        routerLink="/arrosage" 
+        routerLinkActive="active"
+      >
+        Arrossage
+      </a>
+      <a 
+        class="nav-link" 
+        routerLink="/historique" 
+        routerLinkActive="active"
+      >
+        Historique
+      </a>
+    </div>
+
+    <!-- Section Déconnexion en bas -->
+    <div class="text-center logout">
+      <a routerLink="/logout" class="nav-link text-secondary d-flex">
+        <i class="me-2 bi bi-box-arrow-right"></i> <p class="ml-4">Déconnexion</p>
+      </a>
+    </div>
+  </nav>

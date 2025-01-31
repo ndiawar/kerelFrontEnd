@@ -1,0 +1,29 @@
+<nav class="navbar navbar-light bg-white shadow-sm p-3">
+  <div class="container-fluid">
+    <!-- Partie gauche avec bouton hamburger/fermeture -->
+    <div class="d-flex align-items-center">
+      <button class="btn btn-link d-md-none me-2" (click)="toggleSidebar.emit()">
+        <i class="bi fs-4"
+           [class.bi-x]="isSidebarVisible"
+           [class.bi-list]="!isSidebarVisible"
+           style="color: #274C77;"></i> <!-- Ajout de la couleur bleue -->
+      </button>
+      <img src="assets/images/logo.png" alt="Logo" class="img-fluid logo" style="max-width: 180px; max-height: 80px;" />
+    </div>
+
+    <!-- Partie Centrale : Date et Heure -->
+    <div class="d-flex flex-column align-items-center">
+      <span class="text-muted fw-medium">{{ formattedDate }}</span>
+    </div>
+
+    <!-- Partie Droite : Utilisateur -->
+    <div class="d-flex align-items-center">
+      <div class="user-info me-3">
+        <span class="text-muted">Hi Rebecca</span>
+      </div>
+      <div class="user-icon">
+        <i class="bi bi-person-circle fs-1" style="color: #007bff;"></i>
+      </div>
+    </div>
+  </div>
+</nav>
