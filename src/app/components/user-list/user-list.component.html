@@ -28,9 +28,9 @@
         <td>{{ user.cardId }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <span [ngClass]="{'text-success': user.assignation === 'assigner une carte', 'text-danger': user.assignation === 'désassigner la carte'}">
+          <button [ngClass]="{'text-success': user.assignation === 'assigner une carte', 'text-danger': user.assignation === 'désassigner la carte'}">
             {{ user.assignation }}
-          </span>
+          </button>
         </td>
         <td>
           <button class="btn btn-warning">
