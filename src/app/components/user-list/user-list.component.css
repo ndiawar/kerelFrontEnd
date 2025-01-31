@@ -72,6 +72,18 @@
   .text-danger {
     color: #EB0D0D;
   }
+  .action-text {
+    display: none; /* Masquer le texte par défaut */
+    margin-left: 5px; /* Espace à gauche du texte */
+  }
+  
+  .btn:hover .action-text {
+    display: inline; /* Afficher le texte au survol */
+  }
+  
+  .btn {
+    position: relative; /* Pour positionner le texte correctement */
+  }
 
  
   
