@@ -1,1 +1,36 @@
-<p>historique works!</p>
+<div class="container">
+    <h1>Historique des actions</h1>
+  
+    <div class="search-bar mb-3">
+        <label class="search-label">
+          <input
+            type="text"
+            placeholder="Rechercher par nom, prénom, date ..."
+            class="form-control search-input"
+            [(ngModel)]="searchTerm"
+          />
+          <i class="fas fa-search search-icon"></i>
+        </label>
+      </div>
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Action effectuée</th>
+          <th>Heure</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let action of filteredActions"> <!-- Utilisation de filteredActions -->
+          <td>{{ action.id }}</td>
+          <td>{{ action.name }}</td>
+          <td>{{ action.description }}</td>
+          <td>{{ action.time }}</td>
+          <td>{{ action.date | date:'fullDate' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

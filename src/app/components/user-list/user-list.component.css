@@ -1,0 +1,89 @@
+.user-list {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  .assigner{
+    color: red;
+  }
+  
+  .add-user-btn {
+    background-color: #274C77;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .btn-add {
+    background-color: #274C77; /* Couleur bleue */
+    color: white; /* Texte blanc */
+    border: none; /* Pas de bordure */
+    padding: 10px 20px; /* Espacement */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur pointeur */
+    font-size: 16px;
+    margin-bottom: 20px;
+    
+ float: right;
+    
+    
+  }
+  
+ 
+  
+  .text-center {
+    text-align: center; /* Centre le texte */
+    margin-bottom: 20px; /* Espace en bas */
+  }
+  
+  .add-user-btn:hover {
+    background-color: #16a085;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  thead {
+    background-color: #ecf0f1;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .text-success {
+    color: #6941C6;
+  }
+  
+  .text-danger {
+    color: #EB0D0D;
+  }
+  .action-text {
+    display: none; /* Masquer le texte par défaut */
+    margin-left: 5px; /* Espace à gauche du texte */
+  }
+  
+  .btn:hover .action-text {
+    display: inline; /* Afficher le texte au survol */
+  }
+  
+  .btn {
+    position: relative; /* Pour positionner le texte correctement */
+  }
+
+ 
+  
