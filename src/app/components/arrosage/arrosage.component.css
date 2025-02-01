@@ -2,7 +2,7 @@
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border-left: #007bff 8px solid;
+  border-left: #274C77 8px solid;
 }
 
 .card-title {
@@ -16,7 +16,7 @@
 
 .card-body .d-flex i {
   font-size: 1.2rem;
-  color: #007bff;
+  color: #274C77;
 }
 
   
@@ -30,5 +30,36 @@
   
   .table {
     margin-top: 2rem;
+  }
+  
+  .custom-table {
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Espacement entre les lignes */
+  }
+  
+  .rounded-row {
+    border-radius: 40px; /* Bordures arrondies */
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre */
+  }
+  
+  .rounded-row td {
+    border: none; /* Pas de bordure entre les cellules */
+    padding: 15px; /* Espacement interne */
+  }
+  
+  .table-light th {
+    background-color: #f8f9fa; /* Fond clair pour les en-têtes */
+    border-bottom: 2px solid #dee2e6; /* Ligne de séparation en bas */
+  }
+  
+  td .text-primary {
+    font-weight: bold;
+    color: #1e4169; /* Bleu Bootstrap */
+  }
+  
+  .text-success {
+    font-weight: bold;
+    color: #198754; /* Vert Bootstrap */
   }
   
