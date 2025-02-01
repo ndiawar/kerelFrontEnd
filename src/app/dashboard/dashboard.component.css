@@ -18,7 +18,6 @@
   color: black;
 }
 
-
 /* Style spécifique pour la carte météo */
 .weather-card {
   display: flex;
@@ -28,11 +27,13 @@
   gap: 10px; /* Espace entre les éléments */
   height: 370px;
 }
-.location{
+
+.location {
   background-color: #fff;
   border-radius: 5%;
   margin-right: 7%;
 }
+
 /* Style pour l'emplacement */
 .weather-card .location {
   font-size: 18px;
@@ -99,6 +100,7 @@
   height: 50px;
   width: 500px;
 }
+
 /* Conteneur principal pour les cartes */
 .stats {
   display: grid;
@@ -125,6 +127,7 @@
   font-size: 18px; /* Taille du texte réduite */
   color: #333; /* Couleur du texte */
 }
+
 /* Style pour le texte en gras (valeurs) */
 .stat-card strong {
   font-size: 24px; /* Taille du texte en gras augmentée */
@@ -139,7 +142,7 @@
   background-color: #a9cef6; /* Couleur de fond */
   height: 370px; /* Hauteur de la carte */
   width: 1000px; /* Largeur maximale de la carte */
-   /* Largeur dynamique */
+  /* Largeur dynamique */
 }
 
 .charts {
@@ -153,7 +156,6 @@
   left: 0; /* Commence à gauche du conteneur */
   width: 100%; /* Largeur complète */
 }
-
 
 .card.watering-controls {
   font-size: 20px; /* Taille du texte augmentée */
@@ -174,6 +176,7 @@
   align-items: center;
   gap: 10px; /* Espace entre le texte et le bouton */
 }
+
 /* Styles pour les labels */
 .card label {
   display: flex;
@@ -226,6 +229,7 @@
 .label-text {
   margin-left: -115px; /* Déplace les textes de 20px vers la gauche */
 }
+
 .watering-controls {
   grid-column: 3; /* Reste dans la troisième colonne */
   display: flex;
@@ -267,4 +271,70 @@ canvas {
   font-size: 18px;
   margin-bottom: 10px;
   color: black;
+}
+
+/* Media Queries pour la responsivité */
+@media (max-width: 1200px) {
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes pour les écrans moyens */
+  }
+
+  .card-chart {
+    width: 100%; /* Largeur complète pour les écrans moyens */
+  }
+
+  .watering-controls {
+    margin-left: 0; /* Réinitialiser la marge pour les écrans moyens */
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr; /* 1 colonne pour les petits écrans */
+  }
+
+  .stats {
+    width: 100%; /* Largeur complète pour les petits écrans */
+    height: auto; /* Hauteur automatique */
+  }
+
+  .stat-card {
+    width: 100%; /* Largeur complète pour les petits écrans */
+    height: 120px; /* Hauteur réduite */
+  }
+
+  .card-chart {
+    width: 100%; /* Largeur complète pour les petits écrans */
+  }
+
+  .watering-controls {
+    width: 100%; /* Largeur complète pour les petits écrans */
+    margin-left: 0; /* Réinitialiser la marge */
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-card .temperature h1 {
+    font-size: 28px; /* Taille réduite pour les très petits écrans */
+  }
+
+  .weather-card .temperature p {
+    font-size: 14px; /* Taille réduite pour les très petits écrans */
+  }
+
+  .stat-card {
+    height: 100px; /* Hauteur réduite pour les très petits écrans */
+  }
+
+  .stat-card strong {
+    font-size: 20px; /* Taille réduite pour les très petits écrans */
+  }
+
+  .card.watering-controls {
+    height: auto; /* Hauteur automatique pour les très petits écrans */
+  }
+
+  .label-text {
+    margin-left: 0; /* Réinitialiser la marge pour les très petits écrans */
+  }
 }
