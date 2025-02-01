@@ -1,0 +1,39 @@
+<body class="bg-light" style="background-image: url('assets/images/background.png'); background-size: cover; background-repeat: no-repeat;">
+  <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="container-fluid bg-white bg-opacity-50 p-5 w-75 rounded shadow-lg">
+      <!-- Conteneur pour le logo et le titre -->
+      <div class="text-center mb-4">
+        <img src="assets/images/logo.png" alt="KerelEco Logo" class="img-fluid mb-2" style="max-width: 200px;">
+        <h1 class="fw-bold">Se Connecter</h1>
+        <p class="fs-5 text-muted">KerelEco, Votre système intelligent pour la gestion de vos plantations</p>
+      </div>
+
+      <!-- Section des options (scannez ou entrez le code) -->
+      <div *ngIf="!showInputs" class="row">
+        <!-- Option 1 -->
+        <div class="col-6 text-center">
+          <span (click)="scanCard()" class="fs-4 fw-bold text-dark d-block mb-3">Option 1 : Scannez votre carte</span>
+          <img src="assets/images/image-17.png" alt="Option 1 Icon" class="img-fluid" style="max-width: 270px;">
+        </div>
+        <!-- Option 2 -->
+        <div class="col-6 text-center">
+          <span (click)="enterCode()" class="fs-4 fw-bold text-dark d-block mb-3">Option 2 : Saisissez votre code secret</span>
+          <img src="assets/images/image-18.png" alt="Option 2 Icon" class="img-fluid" style="max-width: 150px;">
+        </div>
+      </div>
+
+      <!-- Entrée de code (affiché si showInputs est true) -->
+      <div *ngIf="showInputs" class="d-flex justify-content-center gap-3 mt-4">
+        <input type="text" maxlength="1" (input)="onInputChange($event, 0)" #input0 class="form-control text-center" style="max-width: 50px; height: 50px; font-size: 25px;">
+        <input type="text" maxlength="1" (input)="onInputChange($event, 1)" #input1 class="form-control text-center" style="max-width: 50px; height: 50px; font-size: 25px;">
+        <input type="text" maxlength="1" (input)="onInputChange($event, 2)" #input2 class="form-control text-center" style="max-width: 50px; height: 50px; font-size: 25px;">
+        <input type="text" maxlength="1" (input)="onInputChange($event, 3)" #input3 class="form-control text-center" style="max-width: 50px; height: 50px; font-size: 25px;">
+      </div>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="showError" class="text-danger text-center fs-6 mt-3">
+        Maximum 4 chiffres autorisés.
+      </div>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,12 @@
+.card-body h3 {
+  color: #000000;
+  font-size: 1.5rem;
+}
+
+.card-body img {
+  filter: brightness(1.2);
+}
+
+p {
+  color: rgba(255, 255, 255, 0.8);
+}

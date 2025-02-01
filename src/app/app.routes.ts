@@ -4,13 +4,13 @@ import { UtilisateursComponent } from './components/utilisateurs/utilisateurs.co
 import { HistoriqueComponent } from './components/historique/historique.component';
 import { ArrosageComponent } from './components/arrosage/arrosage.component'
 import { UserListComponent } from './components/user-list/user-list.component';
-import { LoginKerelEcoComponent } from './login-kerel-eco/login-kerel-eco.component';
-
+import { LoginKerelEcoComponent } from './pages/login-kerel-eco/login-kerel-eco.component';
 
 
 
 // Définissez vos itinéraires ici. Chaque route doit correspondre à un composant.
 export const routes: Routes = [
+    { path: '', component: LoginKerelEcoComponent },
     { path: 'login', component: LoginKerelEcoComponent },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'utilisateurs', component: UtilisateursComponent },
@@ -18,6 +18,5 @@ export const routes: Routes = [
     { path: 'historique', component: HistoriqueComponent },
     { path: 'arrosage', component: ArrosageComponent },
     { path: 'historique', component: HistoriqueComponent },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', redirectTo: '/login' }
+    { path: '**', redirectTo: '' }
 ];
