@@ -1,9 +1,10 @@
 <div class="container">
   <h1>Gestion des utilisateurs</h1>
   <div class="d-flex justify-content-end mb-3"> <!-- Utilisez justify-content-end pour aligner à droite -->
-    <button class="btn btn-add">
+    <button class="btn btn-add" (click)="openModal()">
       <i class="fas fa-plus"></i> Ajouter un utilisateur
     </button>
+    <app-inscription-modal *ngIf="isModalOpen" (close)="closeModal()"></app-inscription-modal>
   </div>
 
   <table class="table">
@@ -33,18 +34,21 @@
           </button>
         </td>
         <td>
-          <button class="btn btn-warning" title="Modifier">
+          <button class="btn btn-warning" (click)="openModalM()" title="Modifier">
             <i class="fas fa-pencil-alt"></i>
-            
+        
           </button>
-          <button class="btn btn-danger" title="Supprimer">
+          <app-modification-modal *ngIf="isModalMOpen" (close)="closeModalM()"></app-modification-modal>
+          <button class="btn btn-danger" (click)="openModalS()" title="Supprimer">
             <i class="fas fa-trash"></i>
             
           </button>
-          <button class="btn " title="Bloquer">
+          <app-suppression-modal *ngIf="isModalSOpen" (confirm)="onConfirmDelete()" (close)="closeModalS()"></app-suppression-modal>
+          <button class="btn btn-secondary" (click)="openModalB()" title="Bloquer">
             <i class="fas fa-ban"></i>
             
           </button>
+          <app-blocage-modal *ngIf="isModalBOpen" (confirm)="onConfirmBloq()" (close)="closeModalB()"></app-blocage-modal>
         </td>
       </tr>
     </tbody>
