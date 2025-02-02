@@ -1,0 +1,37 @@
+.accordion-item {
+    border: 1px solid #ccc;
+    border-left: 5px solid; /* Ajoutez cette ligne pour la bordure gauche */
+    margin-bottom: 10px;
+  }
+  
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+  }
+  
+  .accordion-content {
+    padding: 10px;
+  }
+  
+  .accordion-icon {
+    font-weight: bold;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    margin: 0 10px;
+  }
+  
+  .pagination span {
+    margin: 0 10px;
+  }
+  

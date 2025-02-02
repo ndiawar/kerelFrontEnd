@@ -16,7 +16,7 @@
 
     <!-- Sidebar -->
     <div
-      class="col-2 sidebar-col bg-light"
+      class="col-2 sidebar-col"
       [class.active]="sidebarVisible"
     >
       <app-sidebar *ngIf="showLayout"></app-sidebar>
@@ -24,10 +24,10 @@
 
     <!-- Contenu principal -->
     <div
-      class="col-10 main-content bg-light"
+      class="col-10 main-content"
       [class.sidebar-open]="sidebarVisible"
     >
-      <div class="content bg-light rounded shadow-sm h-100">
+      <div class="content rounded shadow-sm h-100">
         <router-outlet></router-outlet>
       </div>
     </div>

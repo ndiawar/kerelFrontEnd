@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginKerelEcoComponent } from './login-kerel-eco.component';
+import { GraphsComponent } from './graphs.component';
 
-describe('LoginKerelEcoComponent', () => {
-  let component: LoginKerelEcoComponent;
-  let fixture: ComponentFixture<LoginKerelEcoComponent>;
+describe('GraphsComponent', () => {
+  let component: GraphsComponent;
+  let fixture: ComponentFixture<GraphsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginKerelEcoComponent]
+      imports: [GraphsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LoginKerelEcoComponent);
+    fixture = TestBed.createComponent(GraphsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

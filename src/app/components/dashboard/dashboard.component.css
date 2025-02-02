@@ -1,0 +1,123 @@
+/* dashboard.component.css */
+.weather-card {
+  background: #007bff21;
+  border-radius: 15px;
+}
+
+.card  {
+  background: #007bff21;
+  border-radius: 15px;
+}
+
+.location {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #274C77;
+  margin: 0;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 0.5rem 1rem;
+}
+
+.date-section {
+  margin-top: 0.5rem;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.temperature {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #274C77;
+}
+
+.separator {
+  font-weight: normal;
+  color: #6c757d;
+  margin: 0 0.25rem;
+}
+
+.min-temp {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.weather-status {
+  font-size: 1.2rem;
+  color: #274C77;
+  font-weight: 500;
+  margin-bottom: 50px;
+}
+
+.weather-icon {
+  font-size: 6rem;
+  margin-left: 1rem;
+  margin-left: 60px;
+}
+
+/* Améliorer la lisibilité du texte dans les cartes */
+.metric-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+/* Autres styles pour les titres et valeurs */
+.metric-title {
+  font-size: 0.5rem;
+  color: #2d3e50;
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.metric-unit {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.weather-icon {
+  font-size: 4rem;
+  margin-left: 1rem;
+}
+
+.weather-status {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* partie troisiéme */
+.accordion-button {
+  background-color: #e9ecef;
+  border: none;
+  font-weight: bold;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.list-group-item {
+  border: none;
+  border-radius: 0;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.badge {
+  font-size: 0.8rem;
+}
+
+.accordion-body a {
+  color: #007bff;
+}
+
+.accordion-body a:hover {
+  text-decoration: underline;
+}

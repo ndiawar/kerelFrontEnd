@@ -1,1 +1,132 @@
-<p>dashboard works!</p>
+<div class="container-fluid justify-content-between align-items-center m-2 p-2"> <!-- Ajout de la classe justify-content-between -->
+  <div class="row g-2"> <!-- Réduction de l'espacement avec g-2 -->
+    <!-- Première carte Météo -->
+    <div class="col-5 col-md-5 col-lg-5 col-xl-5">
+      <div class="card weather-card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-3">
+            <div>
+              <h5 class="location mb-0"><i class="me-2 bi bi-geo-alt"></i> Fatick, Sénégal</h5>
+            </div>
+            <div class="text-end">
+              <div class="date-day">{{ formattedDay }}</div>
+              <div class="date">{{ formattedTime }}, {{ formattedDate }}</div>
+            </div>
+          </div>
+          <div class="weather-info d-flex justify-content-between align-items-end">
+            <div class="weather-icon">
+              🌧️
+            </div>
+            <div>
+              <div class="temperature">
+                <span class="current-temp">28°C</span>
+                <span class="separator">/</span>
+                <span class="min-temp">24°C</span>
+              </div>
+              <div class="weather-status mt-2">Pluie Abondante</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deuxième carte Métriques -->
+    <div class="col-5 col-md-5 col-lg-5 col-xl-5">
+      <div class="card dashboard-card shadow-sm h-100"> <!-- Added h-100 -->
+        <div class="card-body">
+          <div class="row g-2">
+            <!-- Volume Eau -->
+            <div class="col-6">
+              <div class="metric-card text-center">
+                <div class="metric-icon mb-2">🌊 Volume Eau</div>
+                <div class="metric-value">7.90 L</div>
+                <div class="metric-unit">Litre (L)</div>
+              </div>
+            </div>
+
+            <!-- Humidité -->
+            <div class="col-6">
+              <div class="metric-card text-center">
+                <div class="metric-icon mb-2">💧 Humidité</div>
+                <div class="metric-value">85 %</div>
+                <div class="metric-unit">%HR</div>
+              </div>
+            </div>
+
+            <!-- pH du sol -->
+            <div class="col-6">
+              <div class="metric-card text-center">
+                <div class="metric-icon mb-2">🌱 pH du sol</div>
+                <div class="metric-value">4 0/14</div>
+                <div class="metric-desc">Agriculture</div>
+              </div>
+            </div>
+
+            <!-- Température -->
+            <div class="col-6">
+              <div class="metric-card text-center">
+                <div class="metric-icon mb-2">🌡️ Temp.</div>
+                <div class="metric-value">25°C</div>
+                <div class="metric-unit">Celsius (°C)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Troisième carte commandes -->
+    <div class="col-2 col-md-2 col-lg-2 col-xl-2">
+      <div class="card dashboard-card shadow-sm h-100"> <!-- Added h-100 -->
+        <div class="card-body">
+          <div class="row g-2">
+            <!-- Volume Eau -->
+            <div class="col-12">
+              <div class="metric-card text-center">
+                <i class="bi bi-cloud-rain"></i>
+                <div class="metric-icon mb-2"> Arrossage </div>
+                <div class="metric-unit">Litre (L)</div>
+              </div>
+            </div>
+
+            <!-- Humidité -->
+            <div class="col-12">
+              <div class="metric-card text-center">
+                <i class="bi bi-lightbulb"></i>
+                <div class="metric-icon mb-2"> Lumière </div>
+                <div class="metric-unit">%HR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid justify-content-between align-items-center m-2 p-2">
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="card">
+        <div class="card-body">
+          <app-graphs></app-graphs>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid justify-content-between align-items-center m-2 p-2">
+  <div class="row">
+    <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+      <div class="card ">
+        <div class="card-title m-3 p-3">
+          <h5>Action</h5>
+        </div>
+        <div class="card-body">
+          <app-log-accordion></app-log-accordion>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

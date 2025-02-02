@@ -85,5 +85,9 @@
     position: relative; /* Pour positionner le texte correctement */
   }
 
- 
+  /* Applique une opacité de 50% */
+  .btn-opacity {
+    opacity: 0.5;
+  }
+  
   
