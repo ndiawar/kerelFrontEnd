@@ -19,4 +19,5 @@ export class UserListComponent {
     const checked = event.target.checked;
     this.users.forEach(user => user.selected = checked);
   }
+  
 }
