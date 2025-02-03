@@ -6,6 +6,7 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
+import { MeteoService } from '../../services/meteo.service';  // Import du service météo
 import { LogAccordionComponent } from '../log-accordion/log-accordion.component';
 import { GraphsComponent } from '../graphs/graphs.component'; //
 
@@ -22,47 +23,56 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private timer: any;
   private userLocale: string = 'fr-FR';  // Par défaut, on commence avec 'fr-FR'
 
+  temperature: number = 0;
+  weatherCondition: string = '';
+  weatherIcon: string = '';
+
   constructor(
     private datePipe: DatePipe,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private meteoService: MeteoService  // Injection du service météo
   ) {}
-  
+
   ngOnInit() {
     // Vérifie si la plateforme est un navigateur
     if (isPlatformBrowser(this.platformId)) {
-      // Récupère la géolocalisation pour déterminer la langue
-      this.detectUserLocation();
-
       // Met à jour la date toutes les secondes
       this.timer = setInterval(() => {
         this.currentDate = new Date();
       }, 1000);
+
+      // Récupère la météo de Dakar
+      this.getWeather();
     }
   }
-  
+
   ngOnDestroy() {
     // Nettoie l'intervalle lorsque le composant est détruit
     if (this.timer) {
       clearInterval(this.timer);
     }
   }
-
-  // Détecte la position géographique et définit la locale
-  private detectUserLocation(): void {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        // Utilisation des données de position pour ajuster la locale
-        this.setLocaleBasedOnPosition(position);
-      });
-    }
+  private getWeather(): void {
+    this.meteoService.getWeather().then(
+      (data) => {
+        // Vérifie si la liste de prévisions est disponible
+        if (data && data.list && data.list.length > 0) {
+          // Prend la première prévision dans la liste (qui pourrait être la météo actuelle)
+          const currentWeather = data.list[0]; // ou data.list[0] pour récupérer la première prévision
+          this.temperature = currentWeather.main.temp;
+          this.weatherCondition = currentWeather.weather[0]?.description || '';
+          this.weatherIcon = `https://openweathermap.org/img/wn/${currentWeather.weather[0]?.icon}.png`;
+        } else {
+          console.error('Données météo invalides ou vide', data);
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de la météo', error);
+      }
+    );
   }
 
-  // Exemple d'implémentation de changement de locale basé sur la position
-  private setLocaleBasedOnPosition(position: GeolocationPosition): void {
-    // Ici, tu pourrais utiliser des API externes pour obtenir la localisation (comme une API de géolocalisation inversée)
-    const country = position.coords.latitude > 45 ? 'fr-FR' : 'en-US';  // Juste un exemple basé sur la latitude
-    this.userLocale = country;
-  }
+
 
   // Récupère l'heure formatée selon la locale détectée
   get formattedTime(): string {

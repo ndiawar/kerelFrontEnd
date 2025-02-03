@@ -1,34 +1,36 @@
 <div class="container-fluid justify-content-between align-items-center m-2 p-2"> <!-- Ajout de la classe justify-content-between -->
   <div class="row g-2"> <!-- Réduction de l'espacement avec g-2 -->
-    <!-- Première carte Météo -->
-    <div class="col-5 col-md-5">
-      <div class="card weather-card shadow-sm">
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-3">
-            <div>
-              <h5 class="location mb-0"><i class="me-2 bi bi-geo-alt"></i> Fatick, Sénégal</h5>
-            </div>
-            <div class="text-end">
-              <div class="date-day">{{ formattedDay }}</div>
-              <div class="date">{{ formattedTime }}, {{ formattedDate }}</div>
-            </div>
+   <!-- Première carte Météo -->
+<div class="col-5 col-md-5">
+  <div class="card weather-card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-3">
+        <div>
+          <h5 class="location mb-0">
+            <i class="me-2 bi bi-geo-alt"></i> Dakar, Sénégal
+          </h5>
+        </div>
+        <div class="text-end">
+          <div class="date-day">{{ formattedDay }}</div>
+          <div class="date">{{ formattedTime }}, {{ formattedDate }}</div>
+        </div>
+      </div>
+      <div class="weather-info d-flex justify-content-between align-items-end">
+        <div class="weather-icon">
+          <img class="img-fluid w-100" [src]="weatherIcon" alt="Météo" style="max-width: 400px;" />
+        </div>
+
+        <div>
+          <div class="temperature">
+            <span class="current-temp">{{ temperature }}°C</span>
           </div>
-          <div class="weather-info d-flex justify-content-between align-items-end">
-            <div class="weather-icon">
-              🌧️
-            </div>
-            <div>
-              <div class="temperature">
-                <span class="current-temp">28°C</span>
-                <span class="separator">/</span>
-                <span class="min-temp">24°C</span>
-              </div>
-              <div class="weather-status mt-2">Pluie Abondante</div>
-            </div>
-          </div>
+          <div class="weather-status mt-2">{{ weatherCondition }}</div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
 
     <!-- Deuxième carte Métriques -->
     <div class="col-5 col-md-5">
@@ -100,7 +102,7 @@
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                   <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
-                </div>              
+                </div>
               </div>
             </div>
           </div>
