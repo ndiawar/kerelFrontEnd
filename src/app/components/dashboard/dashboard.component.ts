@@ -26,6 +26,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   temperature: number = 0;
   weatherCondition: string = '';
   weatherIcon: string = '';
+  cloudiness: number = 0; // Ajout de la couverture nuageuse
+  windSpeed: number = 0; // Vitesse du vent
+  pressure: number = 0;  // Pression atmosphérique
+  weatherAlert: string = '';  // Alerte météo
+  humidity: number = 0;  // Ajout de l'humidité
 
   constructor(
     private datePipe: DatePipe,
@@ -52,18 +57,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
       clearInterval(this.timer);
     }
   }
+
   private getWeather(): void {
     this.meteoService.getWeather().then(
       (data) => {
-        // Vérifie si la liste de prévisions est disponible
         if (data && data.list && data.list.length > 0) {
-          // Prend la première prévision dans la liste (qui pourrait être la météo actuelle)
-          const currentWeather = data.list[0]; // ou data.list[0] pour récupérer la première prévision
+          const currentWeather = data.list[0];
+
           this.temperature = currentWeather.main.temp;
           this.weatherCondition = currentWeather.weather[0]?.description || '';
           this.weatherIcon = `https://openweathermap.org/img/wn/${currentWeather.weather[0]?.icon}.png`;
+          this.humidity = currentWeather.main.humidity;  // Humidité
+          this.cloudiness = currentWeather.clouds.all;  // Couverture nuageuse
+          this.windSpeed = currentWeather.wind.speed;  // Vitesse du vent
+          this.pressure = currentWeather.main.pressure;  // Pression
+
+          // Vérification des conditions météo pour générer une alerte
+          if (this.weatherCondition.includes('pluie')) {
+            this.weatherAlert = "🌧️ Il risque de pleuvoir, l'arrosage automatique doit être désactivé.";
+          } else if (this.weatherCondition.includes('orage')) {
+            this.weatherAlert = "⛈️ Attention aux orages, arrosage désactivé.";
+          } else if (this.windSpeed > 40) {
+            this.weatherAlert = "💨 Vent fort détecté ! Arrosage doit etre réduit pour éviter l'évaporation.";
+          } else if (this.weatherCondition.includes('brouillard') || this.weatherCondition.includes('brume')) {
+            this.weatherAlert = "🌫️ Brouillard détecté. Vérifiez l'humidité avant d'arroser.";
+          }  else if (this.temperature < 20) {
+            // Alerte pour les températures froides
+            this.weatherAlert = "❄️ Température froide détectée ! L'arrosage doit etre désactivé pour éviter les dommages aux racines.";
+          } else if (this.weatherCondition.includes('dégagé') && this.temperature > 29) {
+            this.weatherAlert = "☀️ Forte chaleur détectée, augmentation de l'arrosage recommandée.";
+          }else if (this.weatherCondition.includes('nuageux')) {
+            this.weatherAlert = "☁️ Temps nuageux, surveillez l'humidité.";
+          } else {
+            this.weatherAlert = "✅ Météo favorable, arrosage normal.";
+          }
         } else {
-          console.error('Données météo invalides ou vide', data);
+          console.error('Données météo invalides ou vides', data);
         }
       },
       (error) => {
@@ -71,7 +100,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     );
   }
-
 
 
   // Récupère l'heure formatée selon la locale détectée

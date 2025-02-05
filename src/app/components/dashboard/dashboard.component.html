@@ -1,6 +1,6 @@
 <div class="container-fluid justify-content-between align-items-center m-2 p-2"> <!-- Ajout de la classe justify-content-between -->
   <div class="row g-2"> <!-- Réduction de l'espacement avec g-2 -->
-   <!-- Première carte Météo -->
+  <!-- Carte Météo -->
 <div class="col-5 col-md-5">
   <div class="card weather-card shadow-sm">
     <div class="card-body">
@@ -22,14 +22,21 @@
 
         <div>
           <div class="temperature">
-            <span class="current-temp">{{ temperature }}°C</span>
+           <span class="current-temp">{{ temperature }}°C</span>
           </div>
           <div class="weather-status mt-2">{{ weatherCondition }}</div>
+          <div class="weather-metrics mt-2">
+            <div>🌬️ Vent: {{ windSpeed }} km/h</div>
+            <div>☁️ Couverture nuageuse: {{ cloudiness }} %</div>
+            <div>🌡️ Pression: {{ pressure }} hPa</div>
+          </div>
         </div>
       </div>
+      <div class="alert alert-warning mt-3">{{ weatherAlert }}</div>
     </div>
   </div>
 </div>
+
 
 
     <!-- Deuxième carte Métriques -->

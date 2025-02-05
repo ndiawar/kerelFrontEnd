@@ -6,7 +6,7 @@ import axios from 'axios';  // Importation d'Axios
 })
 export class MeteoService {
   private apiKey = '36b2cae3f500bf74d98baf5ab072ef9f'; // Remplace avec ta clé OpenWeatherMap
-  private apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=Dakar,Senegal&appid=${this.apiKey}&units=metric&lang=fr`;
+  private apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=Dakar&appid=${this.apiKey}&units=metric&lang=fr`;
 
 
   constructor() {}
