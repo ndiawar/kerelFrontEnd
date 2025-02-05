@@ -22,6 +22,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();
   private timer: any;
   private userLocale: string = 'fr-FR';  // Par défaut, on commence avec 'fr-FR'
+  // Définition des cartes avec leurs informations dynamiques
+  metrics = [
+    { icon: '🌊', title: 'Volume Eau', value: '7.90 L', unit: 'Litre (L)' },
+    { icon: '💧', title: 'Humidité', value: '85 %', unit: '%HR' },
+    { icon: '🌱', title: 'pH du sol', value: '4 0/14', unit: 'Agriculture' },
+    { icon: '🌡️', title: 'Temp.', value: '25°C', unit: 'Celsius (°C)' }
+  ];
 
   temperature: number = 0;
   weatherCondition: string = '';
