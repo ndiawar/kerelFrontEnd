@@ -5,7 +5,7 @@
     <h2>Inscription</h2>
   </div>
 
-  <form (ngSubmit)="onSubmit()" #inscriptionForm="ngForm">
+  <form (ngSubmit)="onSubmit(inscriptionForm)" #inscriptionForm="ngForm">
     <div class="form-group">
       <label for="prenom">Prénom<span>*</span></label>
       <input type="text" id="prenom" name="prenom" ngModel required 
@@ -40,8 +40,8 @@
     </div>
 
     <div class="form-group">
-      <label for="numeroCarte">Email<span>*</span></label>
-      <input type="email" id="numeroCarte" name="numeroCarte" ngModel required 
+      <label for="numeroCarte">Email</label>
+      <input type="email" id="numeroCarte" name="numeroCarte" ngModel 
              pattern="^[A-Za-z]{2,}@[A-Za-z]+\.[A-Za-z]{1,}$" 
              #numeroCarte="ngModel"
              (input)="numeroCarte.control.markAsTouched()">
@@ -56,8 +56,8 @@
               #role="ngModel" 
               (change)="role.control.markAsTouched()">
         <option value="" disabled selected hidden>Choisissez un rôle</option>
-        <option value="utilisateur_simple">Utilisateur simple</option>
-        <option value="super_admin">Super admin</option>
+        <option value="user">Utilisateur simple</option>
+        <option value="superadmin">Super admin</option>
       </select>
       <div *ngIf="role.invalid && role.touched" class="error-message">
         Veuillez sélectionner un rôle.

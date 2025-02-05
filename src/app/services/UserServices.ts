@@ -1,25 +1,65 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import axios, { AxiosInstance } from 'axios';
 import { environment } from '../../environments/environment'; // Importation de l'environnement
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
   private apiUrl = environment.apiUrl; // Utilisation de l'URL de l'API à partir de l'environnement
+  private axiosInstance: AxiosInstance;
 
-  constructor(private http: HttpClient) { }
-
-  // Exemple de méthode pour récupérer les utilisateurs
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`); // Utilisation de l'apiUrl
+  constructor() {
+    this.axiosInstance = axios.create({
+      baseURL: this.apiUrl,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming the token is stored in localStorage
+      }
+    });
   }
 
-  // Autres méthodes pour interagir avec l'API (par exemple, créer un utilisateur)
-  createUser(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, userData); // Utilisation de l'apiUrl
+  async getAllUtilisateurs(params?: any): Promise<any> {
+    const response = await this.axiosInstance.get('/utilisateurs', { params });
+    return response.data;
+  }
+
+  async getUtilisateurById(id: number): Promise<any> {
+    const response = await this.axiosInstance.get(`/utilisateurs/${id}`);
+    return response.data;
+  }
+
+  async createUtilisateur(data: any): Promise<any> {
+    const response = await this.axiosInstance.post('/utilisateurs', data);
+    return response.data;
+  }
+
+  async updateUtilisateur(id: number, data: any): Promise<any> {
+    const response = await this.axiosInstance.put(`/utilisateurs/${id}`, data);
+    return response.data;
+  }
+
+  async deleteUtilisateur(id: number): Promise<any> {
+    const response = await this.axiosInstance.delete(`/utilisateurs/${id}`);
+    return response.data;
+  }
+
+  async loginByCode(code: string): Promise<any> {
+    const response = await this.axiosInstance.post('/utilisateurs/login', { code });
+    return response.data;
+  }
+
+  async logout(): Promise<any> {
+    const response = await this.axiosInstance.post('/utilisateurs/logout');
+    return response.data;
+  }
+
+  async bloquerUtilisateur(id: number): Promise<any> {
+    const response = await this.axiosInstance.put('/utilisateurs/bloquer', { id });
+    return response.data;
+  }
+
+  async debloquerUtilisateur(id: number): Promise<any> {
+    const response = await this.axiosInstance.put('/utilisateurs/debloquer', { id });
+    return response.data;
   }
 }

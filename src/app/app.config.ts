@@ -4,6 +4,8 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
+import { withFetch } from '@angular/common/http';
 
 // Enregistrer les données de locale français
 registerLocaleData(localeFr);
@@ -13,6 +15,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
+    provideHttpClient(
+      withFetch(),
+    ),
     { provide: LOCALE_ID, useValue: 'fr-FR' }
   ]
 };
+
+
