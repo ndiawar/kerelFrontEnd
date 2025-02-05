@@ -9,6 +9,7 @@ import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MeteoService } from '../../services/meteo.service';  // Import du service météo
 import { LogAccordionComponent } from '../log-accordion/log-accordion.component';
 import { GraphsComponent } from '../graphs/graphs.component'; //
+import { WebSocketService } from '../../services/websocket.service'; // Importer le service WebSocket
 
 @Component({
   selector: 'app-dashboard',
@@ -23,12 +24,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private timer: any;
   private userLocale: string = 'fr-FR';  // Par défaut, on commence avec 'fr-FR'
   // Définition des cartes avec leurs informations dynamiques
-  metrics = [
-    { icon: '🌊', title: 'Volume Eau', value: '7.90 L', unit: 'Litre (L)' },
-    { icon: '💧', title: 'Humidité', value: '85 %', unit: '%HR' },
-    { icon: '🌱', title: 'pH du sol', value: '4 0/14', unit: 'Agriculture' },
-    { icon: '🌡️', title: 'Temp.', value: '25°C', unit: 'Celsius (°C)' }
-  ];
+ // Définition des cartes avec des valeurs initiales vides
+ metrics = [
+  { icon: '🌊', title: 'Volume Eau', value: '...', unit: 'Litre (L)' },
+  { icon: '💧', title: 'Humidité', value: '...', unit: '%HR' },
+  { icon: '🌱', title: 'pH du sol', value: '...', unit: 'Agriculture' },
+  { icon: '🌡️', title: 'Temp.', value: '...', unit: 'Celsius (°C)' }
+];
+
 
   temperature: number = 0;
   weatherCondition: string = '';
@@ -39,10 +42,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   weatherAlert: string = '';  // Alerte météo
   humidity: number = 0;  // Ajout de l'humidité
 
+
+
+  // Propriétés pour stocker les données des capteurs
+  temperature_sensor: number | null = null;
+  ph: number | null = null;
+  humidity_sensor: number | null = null;
+  waterVolume: number | null = null;
+
+
   constructor(
     private datePipe: DatePipe,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private meteoService: MeteoService  // Injection du service météo
+    private meteoService: MeteoService,  // Injection du service météo
+    private webSocketService: WebSocketService // Injecter le service WebSocket
   ) {}
 
   ngOnInit() {
@@ -55,6 +68,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       // Récupère la météo de Dakar
       this.getWeather();
+
+      // Connexion au WebSocket pour recevoir les données des capteurs
+      this.webSocketService.connect('ws://localhost:8080').subscribe(data => {
+        this.temperature_sensor = data.temperature || null;
+        this.ph = data.ph || null;
+        this.humidity_sensor = data.humidity || null;
+        this.waterVolume = data.water_level || null;
+
+        // Mettez à jour les métriques avec les données reçues
+        this.updateMetrics();
+      });
     }
   }
 
@@ -63,8 +87,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.timer) {
       clearInterval(this.timer);
     }
-  }
 
+    // Fermer la connexion WebSocket lors de la destruction du composant
+    this.webSocketService.close();
+  }
   private getWeather(): void {
     this.meteoService.getWeather().then(
       (data) => {
@@ -108,6 +134,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+
+  private updateMetrics() {
+    // Mettez à jour les valeurs dynamiques des métriques
+    this.metrics = [
+      { icon: '🌊', title: 'Volume Eau', value: this.waterVolume !== null ? `${this.waterVolume} L` : '...', unit: 'Litre (L)' },
+      { icon: '💧', title: 'Humidité', value: this.humidity_sensor !== null ? `${this.humidity_sensor} %` : '...', unit: '%HR' },
+      { icon: '🌱', title: 'pH du sol', value: this.ph !== null ? `${this.ph}` : '...', unit: 'Agriculture' },
+      { icon: '🌡️', title: 'Temp.', value: this.temperature_sensor !== null ? `${this.temperature_sensor}°C` : '...', unit: 'Celsius (°C)' }
+    ];
+  }
 
   // Récupère l'heure formatée selon la locale détectée
   get formattedTime(): string {
