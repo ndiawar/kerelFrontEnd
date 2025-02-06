@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { UserService } from '../services/UserServices';
+import { UserService } from '../../services/UserServices';
 
 
 @Component({
