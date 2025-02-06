@@ -18,14 +18,23 @@ export class UserService {
     this.axiosInstance = axios.create({
       baseURL: this.apiUrl,
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming the token is stored in localStorage
+        // Vérification si `localStorage` est disponible avant de l'utiliser
+        'Authorization': `Bearer ${this.getTokenFromLocalStorage()}`
       }
     });
   }
 
   async getAllUtilisateurs(): Promise<any> {
     const response = await this.axiosInstance.get('/utilisateurs');
+  // Méthode pour récupérer le token de localStorage en toute sécurité
     return response.data;
+  }
+
+  private getTokenFromLocalStorage(): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null; // Retourne null si localStorage n'est pas disponible
   }
 
   async getUtilisateurById(id: number): Promise<any> {

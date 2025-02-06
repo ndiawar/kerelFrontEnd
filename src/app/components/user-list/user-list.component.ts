@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { InscriptionModalComponent } from '../../inscription-modal/inscription-modal.component';
-import { ModificationModalComponent } from '../../modification-modal/modification-modal.component';
-import { SuppressionModalComponent } from '../../suppression-modal/suppression-modal.component';
-import { BlocageModalComponent } from '../../blocage-modal/blocage-modal.component';
+
 import { UserService } from '../../services/UserServices';
 import { AssignCardComponent } from '../../assign-card/assign-card.component';
+import { InscriptionModalComponent } from '../../pages/inscription-modal/inscription-modal.component';
+import { ModificationModalComponent } from '../../pages/modification-modal/modification-modal.component';
+import { SuppressionModalComponent } from '../../pages/suppression-modal/suppression-modal.component';
+import { BlocageModalComponent } from '../../pages/blocage-modal/blocage-modal.component';
 
 @Component({
   selector: 'app-user-list',
