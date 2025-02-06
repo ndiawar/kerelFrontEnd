@@ -17,31 +17,37 @@ import { GraphsComponent } from '../graphs/graphs.component'; //
   styleUrls: ['./dashboard.component.css'],
   providers: [DatePipe]
 })
+
+
 export class DashboardComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();
   private timer: any;
   private userLocale: string = 'fr-FR';  // Par défaut, on commence avec 'fr-FR'
 
+  // Définition des cartes avec leurs informations dynamiques
+  metrics = [
+    { icon: '🌊', title: 'Volume Eau', value: '7.90 L', unit: 'Litre (L)' },
+    { icon: '💧', title: 'Humidité', value: '85 %', unit: '%HR' },
+    { icon: '🌱', title: 'pH du sol', value: '4 0/14', unit: 'Agriculture' },
+    { icon: '🌡️', title: 'Temp.', value: '25°C', unit: 'Celsius (°C)' }
+  ];
+
   constructor(
     private datePipe: DatePipe,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
-  
+
   ngOnInit() {
     // Vérifie si la plateforme est un navigateur
     if (isPlatformBrowser(this.platformId)) {
-      // Récupère la géolocalisation pour déterminer la langue
       this.detectUserLocation();
-
-      // Met à jour la date toutes les secondes
       this.timer = setInterval(() => {
         this.currentDate = new Date();
       }, 1000);
     }
   }
-  
+
   ngOnDestroy() {
-    // Nettoie l'intervalle lorsque le composant est détruit
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -51,31 +57,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private detectUserLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        // Utilisation des données de position pour ajuster la locale
         this.setLocaleBasedOnPosition(position);
       });
     }
   }
 
-  // Exemple d'implémentation de changement de locale basé sur la position
   private setLocaleBasedOnPosition(position: GeolocationPosition): void {
-    // Ici, tu pourrais utiliser des API externes pour obtenir la localisation (comme une API de géolocalisation inversée)
-    const country = position.coords.latitude > 45 ? 'fr-FR' : 'en-US';  // Juste un exemple basé sur la latitude
+    const country = position.coords.latitude > 45 ? 'fr-FR' : 'en-US';
     this.userLocale = country;
   }
 
-  // Récupère l'heure formatée selon la locale détectée
   get formattedTime(): string {
     return this.datePipe.transform(this.currentDate, 'HH:mm', this.userLocale) || '';
   }
 
-  // Récupère le jour de la semaine selon la locale détectée
   get formattedDay(): string {
     return this.datePipe.transform(this.currentDate, 'EEEE', this.userLocale) || '';
   }
 
-  // Récupère la date selon la locale détectée
   get formattedDate(): string {
     return this.datePipe.transform(this.currentDate, 'd MMMM y', this.userLocale) || '';
   }
 }
+

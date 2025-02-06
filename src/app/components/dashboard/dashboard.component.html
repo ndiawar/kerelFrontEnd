@@ -35,39 +35,12 @@
       <div class="card dashboard-card shadow-sm h-100"> <!-- Added h-100 -->
         <div class="card-body">
           <div class="row g-2">
-            <!-- Volume Eau -->
-            <div class="col-6">
+            <!-- Boucle sur chaque élément dans le tableau metrics pour afficher chaque carte -->            
+            <div class="col-6" *ngFor="let metric of metrics">
               <div class="metric-card text-center">
-                <div class="metric-icon mb-2">🌊 Volume Eau</div>
-                <div class="metric-value">7.90 L</div>
-                <div class="metric-unit">Litre (L)</div>
-              </div>
-            </div>
-
-            <!-- Humidité -->
-            <div class="col-6">
-              <div class="metric-card text-center">
-                <div class="metric-icon mb-2">💧 Humidité</div>
-                <div class="metric-value">85 %</div>
-                <div class="metric-unit">%HR</div>
-              </div>
-            </div>
-
-            <!-- pH du sol -->
-            <div class="col-6">
-              <div class="metric-card text-center">
-                <div class="metric-icon mb-2">🌱 pH du sol</div>
-                <div class="metric-value">4 0/14</div>
-                <div class="metric-desc">Agriculture</div>
-              </div>
-            </div>
-
-            <!-- Température -->
-            <div class="col-6">
-              <div class="metric-card text-center">
-                <div class="metric-icon mb-2">🌡️ Temp.</div>
-                <div class="metric-value">25°C</div>
-                <div class="metric-unit">Celsius (°C)</div>
+                <div class="metric-icon mb-2">{{ metric.icon }} {{ metric.title }}</div>
+                <div class="metric-value">{{ metric.value }}</div>
+                <div class="metric-unit">{{ metric.unit }}</div>
               </div>
             </div>
           </div>
