@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/UserServices';
 import { Router } from '@angular/router';
+import { OnInit } from '@angular/core';
 
 
 
@@ -14,12 +15,17 @@ import { Router } from '@angular/router';
   templateUrl: './login-kerel-eco.component.html',
   styleUrls: ['./login-kerel-eco.component.css']
 })
-export class LoginKerelEcoComponent {
+export class LoginKerelEcoComponent implements OnInit {
   showInputs = false; // Contrôle l'affichage des inputs
   showError = false; // Contrôle l'affichage du message d'erreur
   showError2 = false;
 
   constructor(private apiService: UserService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.apiService.initializeWebSocket(); // Initialiser la connexion WebSocket
+    this.listenToWebSocket(); // Écouter les messages WebSocket
+  }
 
   // Références aux inputs
   @ViewChild('input0') input0!: ElementRef<HTMLInputElement>;
@@ -112,6 +118,7 @@ export class LoginKerelEcoComponent {
         response => {
           // Supposons que la réponse indique une authentification réussie
           console.log('Login response:', response);
+          this.apiService.saveToken(response.token);
           if (response) {
             // Redirection vers le tableau de bord
             this.router.navigate(['/dashboard']);
@@ -154,4 +161,27 @@ export class LoginKerelEcoComponent {
     this.showInputs = true; // Affiche les inputs pour la saisie du code
     setTimeout(() => this.input0.nativeElement.focus(), 0); // Focus sur le premier input
   }
+
+  listenToWebSocket(): void {
+    const ws = new WebSocket('ws://localhost:3004');
+    ws.onmessage = (event) => {
+      const scannedCard = event.data;
+      console.log('Carte scannée:', scannedCard);
+      this.handleRFIDLogin(scannedCard);
+  }}
+
+  private handleRFIDLogin(rfidCardId: string): void {
+    this.apiService.loginByCard(rfidCardId).then(
+        response => {
+          if(response.token){
+            this.router.navigate(['/dashboard']);
+          }
+        
+    }).catch(
+      error => {
+        // Gérer les erreurs de la requête
+        console.error('Login failed:', error);
+      }
+    );;
+}
 }

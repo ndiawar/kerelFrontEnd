@@ -29,9 +29,10 @@
         <td>{{ user.cardId }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}">
+          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="openModalA()">
             {{ user.assignation }}
           </button>
+          <app-assign-card *ngIf="isModalAOpen"></app-assign-card>
         </td>
         <td>
           <button class="btn ms-2" (click)="openModalM()" title="Modifier">

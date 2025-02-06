@@ -1,28 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { InscriptionModalComponent } from '../../inscription-modal/inscription-modal.component';
 import { ModificationModalComponent } from '../../modification-modal/modification-modal.component';
 import { SuppressionModalComponent } from '../../suppression-modal/suppression-modal.component';
 import { BlocageModalComponent } from '../../blocage-modal/blocage-modal.component';
+import { UserService } from '../../services/UserServices';
+import { AssignCardComponent } from '../../assign-card/assign-card.component';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   standalone:true,
-  imports: [CommonModule,FormsModule, InscriptionModalComponent, ModificationModalComponent, SuppressionModalComponent, BlocageModalComponent],
+  imports: [CommonModule,FormsModule, InscriptionModalComponent, ModificationModalComponent, SuppressionModalComponent, BlocageModalComponent, AssignCardComponent],
   styleUrls: ['./user-list.component.css'],
 })
-export class UserListComponent {
+export class UserListComponent implements OnInit{
   isModalOpen = false;
   isModalMOpen = false;
   isModalSOpen = false;
   isModalBOpen = false;
-  users = [
-    { name: 'Olivia Rhye', cardId: '---', email: 'olivia@untitled.com', assignation: 'assigner une carte', selected: false },
-    { name: 'Phoenix Baker', cardId: '045678', email: 'phoenix@untitled.com', assignation: 'désassigner la carte', selected: false },
-    { name: 'Lana Steiner', cardId: '069437', email: 'lana@untitled.com', assignation: 'assigner une carte', selected: false },
-  ];
+  isModalAOpen = false;
+  users: any[] = [];
+  
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.userService.getAllUtilisateurs().then(
+      (response) => {
+        this.users = response.map((user: any) => ({
+          name: `${user.prenom} ${user.nom}`,
+          cardId: user.rfid_code || '---',
+          email: user.email,
+          assignation: user.rfid_code ? 'désassigner la carte' : 'assigner une carte',
+          selected: false,
+        }));
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des utilisateurs:', error);
+      }
+    );
+  }
+
   toggleSelectAll(event: any) {
     const checked = event.target.checked;
     this.users.forEach(user => user.selected = checked);
@@ -49,6 +73,14 @@ export class UserListComponent {
 
   closeModalS() {
     this.isModalSOpen = false;
+  }
+
+  openModalA() {
+    this.isModalAOpen = true;
+  }
+
+  closeModalA() {
+    this.isModalAOpen = false;
   }
 
   onConfirmDelete() {

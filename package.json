@@ -31,7 +31,9 @@
     "ng2-charts": "^8.0.0",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
+    "serialport": "^13.0.0",
     "tslib": "^2.3.0",
+    "ws": "^8.18.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
