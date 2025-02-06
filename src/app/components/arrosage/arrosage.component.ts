@@ -68,14 +68,35 @@ export class ArrosageComponent implements OnInit {
     }
   }
 
-  // Validation des heures
-  validateHours(): boolean {
-    if (this.newPlant.morning && this.newPlant.evening) {
-      return this.newPlant.morning < this.newPlant.evening;
-    }
-    return false; // Si l'une des heures est manquante, retournez faux
-  }
+  // Validation des heures// Validation des heures
+validateHours(): boolean {
+  if (this.newPlant.morning && this.newPlant.evening) {
+      const morningHour = this.newPlant.morning;
+      const eveningHour = this.newPlant.evening;
 
+      // Vérifie que l'heure du matin est inférieure à l'heure du soir
+      const isValidMorningEvening = morningHour < eveningHour;
+
+      // Vérifie que l'heure du matin n'est pas entre 15h00 et 03h00
+      const isValidMorning = !(this.isBetween(morningHour, '15:00', '03:00'));
+
+      // Vérifie que l'heure du soir n'est pas entre 03h00 et 15h00
+      const isValidEvening = !(this.isBetween(eveningHour, '03:00', '15:00'));
+
+      return isValidMorningEvening && isValidMorning && isValidEvening;
+  }
+  return false; // Si l'une des heures est manquante, retournez faux
+}
+
+// Méthode pour vérifier si une heure est entre deux heures
+isBetween(hour: string, start: string, end: string): boolean {
+  if (start < end) {
+      return hour >= start && hour <= end;
+  } else {
+      // Gère le cas où l'intervalle traverse minuit
+      return hour >= start || hour <= end;
+  }
+}
   get paginatedPlants() {
     const start = (this.page - 1) * this.pageSize;
     const end = start + this.pageSize;
