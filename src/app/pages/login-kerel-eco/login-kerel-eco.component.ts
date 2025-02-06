@@ -1,17 +1,25 @@
 import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/UserServices';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-login-kerel-eco',
   standalone: true,
   imports: [RouterModule, CommonModule],
+  providers: [],
   templateUrl: './login-kerel-eco.component.html',
   styleUrls: ['./login-kerel-eco.component.css']
 })
 export class LoginKerelEcoComponent {
   showInputs = false; // Contrôle l'affichage des inputs
   showError = false; // Contrôle l'affichage du message d'erreur
+  showError2 = false;
+
+  constructor(private apiService: UserService, private router: Router) { }
 
   // Références aux inputs
   @ViewChild('input0') input0!: ElementRef<HTMLInputElement>;
@@ -98,13 +106,40 @@ export class LoginKerelEcoComponent {
       this.input2.nativeElement.value,
       this.input3.nativeElement.value
     ].join('');
-
+  
     if (code.length === 4) {
-      console.log('Code saisi :', code);
-      // Ajoutez ici la logique pour valider le code (exemple : appel à une API)
+      this.apiService.loginByCode(code).then(
+        response => {
+          // Supposons que la réponse indique une authentification réussie
+          console.log('Login response:', response);
+          if (response) {
+            // Redirection vers le tableau de bord
+            this.router.navigate(['/dashboard']);
+          } else {
+            // Gérer le cas où l'authentification échoue
+            this.showError2 = true;
+            this.clearInputs();
+          }
+        }
+      ).catch(
+        error => {
+          // Gérer les erreurs de la requête
+          console.error('Login failed:', error);
+          this.showError2 = true;
+          this.clearInputs();
+        }
+      );
     } else {
       console.log('Veuillez saisir un code à 4 chiffres');
     }
+  }
+  
+  clearInputs() {
+    this.input0.nativeElement.value = '';
+    this.input1.nativeElement.value = '';
+    this.input2.nativeElement.value = '';
+    this.input3.nativeElement.value = '';
+    this.input0.nativeElement.focus(); // Optionally, set focus back to the first input
   }
 
   // Définir la fonction scanCard()

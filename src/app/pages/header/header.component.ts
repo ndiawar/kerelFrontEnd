@@ -11,11 +11,13 @@ import {
 } from '@angular/core';
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { UserService } from '../../services/UserServices';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   providers: [DatePipe]
@@ -29,7 +31,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private datePipe: DatePipe,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -52,5 +56,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   get formattedDate(): string {
     // Formate la date en utilisant le format spécifié
     return this.datePipe.transform(this.currentDate, 'HH:mm  EEEE, d MMMM y', 'fr-FR') || '';
+  }
+
+  logout() {
+    this.userService.logout().then(
+      response => {
+        console.log('Logout successful:', response);
+        this.router.navigate(['/login']); // Redirige vers la page de login
+      }
+    ).catch(
+      error => {
+        console.error('Logout failed:', error);
+      }
+    );
   }
 }
