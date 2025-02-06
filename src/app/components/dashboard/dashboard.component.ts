@@ -81,7 +81,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
     }
   }
-
   ngOnDestroy() {
     // Nettoie l'intervalle lorsque le composant est détruit
     if (this.timer) {
