@@ -8,16 +8,15 @@
 
       <!-- Champ pour la date -->
       <div class="form-group mb-3 w-100">
-          <input
-              type="date"
-              class="form-control custom-input bg-white p-4 m-1"
-              [(ngModel)]="newPlant.date"
-              name="date"
-              [value]="today"
-              required
-              placeholder="Choisissez la date"
-          />
-      </div>
+        <input
+            type="date"
+            class="form-control custom-input bg-white p-4 m-1"
+            [(ngModel)]="newPlant.date"
+            name="date"
+            required
+            placeholder="Choisissez la date"
+        />
+    </div>
 
       <!-- Sélecteur de type de plante -->
       <div class="form-group mb-3 w-100">
@@ -35,30 +34,33 @@
               <option value="cereales">Céréalières</option>
           </select>
       </div>
+<!-- Heure du matin -->
+<div class="form-group mb-3 w-100">
+  <input
+      type="time"
+      class="form-control custom-input bg-white p-4 m-1"
+      [(ngModel)]="newPlant.morning"
+      name="morning"
+      required
+      placeholder="Heure du matin"
+  />
+</div>
 
-      <!-- Heure du matin -->
-      <div class="form-group mb-3 w-100">
-          <input
-              type="time"
-              class="form-control custom-input bg-white p-4 m-1"
-              [(ngModel)]="newPlant.morning"
-              name="morning"
-              required
-              placeholder="Heure du matin"
-          />
-      </div>
+<!-- Heure du soir -->
+<div class="form-group mb-3 w-100">
+  <input
+      type="time"
+      class="form-control custom-input bg-white p-4 m-1"
+      [(ngModel)]="newPlant.evening"
+      name="evening"
+      placeholder="Heure du soir"
+  />
+</div>
 
-      <!-- Heure du soir -->
-      <div class="form-group mb-3 w-100">
-          <input
-              type="time"
-              class="form-control custom-input bg-white p-4 m-1"
-              [(ngModel)]="newPlant.evening"
-              name="evening"
-              placeholder="Heure du soir"
-          />
-      </div>
-
+<!-- Message d'erreur -->
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
       <!-- Quantité d'eau -->
       <div class="form-group mb-3 w-100">
           <input

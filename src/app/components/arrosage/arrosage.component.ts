@@ -21,7 +21,6 @@ export interface Plant {
   styleUrls: ['./arrosage.component.css']
 })
 export class ArrosageComponent implements OnInit {
-
   today: string = new Date().toISOString().split('T')[0];
   newPlant: Plant = {
     date: this.today,
@@ -31,6 +30,7 @@ export class ArrosageComponent implements OnInit {
   plants: Plant[] = [];
   page: number = 1;
   pageSize: number = 2;
+  errorMessage: string = ''; // Propriété pour le message d'erreur
 
   constructor(private arrosageService: ArrosageService) {}
 
@@ -40,27 +40,40 @@ export class ArrosageComponent implements OnInit {
 
   // Charger les programmations existantes depuis l’API
   async loadArrosages() {
-  try {
-    this.plants = await this.arrosageService.getAllArrosages();
-    console.log('Données chargées :', this.plants); // Afficher les données dans la console
-  } catch (error) {
-    console.error('Erreur lors du chargement des arrosages', error);
+    try {
+      this.plants = await this.arrosageService.getAllArrosages();
+      console.log('Données chargées :', this.plants); // Afficher les données dans la console
+    } catch (error) {
+      console.error('Erreur lors du chargement des arrosages', error);
+    }
   }
-}
 
   // Ajouter une nouvelle programmation d’arrosage
   async addPlant() {
     const { date, ...dataWithoutDate } = this.newPlant;
 
-    if (dataWithoutDate.type && dataWithoutDate.water !== undefined) {
-      try {
-        const response = await this.arrosageService.ajouterArrosage(dataWithoutDate);
-        this.plants.push(response); // Ajouter la nouvelle programmation à la liste
-        this.newPlant = { date: this.today }; // Réinitialiser newPlant
-      } catch (error) {
-        console.error('Erreur lors de l’ajout de la plante', error);
+    if (this.validateHours()) {
+      if (dataWithoutDate.type && dataWithoutDate.water !== undefined) {
+        try {
+          const response = await this.arrosageService.ajouterArrosage(this.newPlant); // Envoyer newPlant avec date
+          this.plants.push(response); // Ajouter la nouvelle programmation à la liste
+          this.newPlant = { date: this.today }; // Réinitialiser newPlant
+          this.errorMessage = ''; // Réinitialiser le message d'erreur
+        } catch (error) {
+          console.error('Erreur lors de l’ajout de la plante', error);
+        }
       }
+    } else {
+      this.errorMessage = 'Erreur sur la configuration de l\'heure, veuillez réessayer.';
     }
+  }
+
+  // Validation des heures
+  validateHours(): boolean {
+    if (this.newPlant.morning && this.newPlant.evening) {
+      return this.newPlant.morning < this.newPlant.evening;
+    }
+    return false; // Si l'une des heures est manquante, retournez faux
   }
 
   get paginatedPlants() {

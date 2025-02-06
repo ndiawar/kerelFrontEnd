@@ -8,26 +8,28 @@ export class ArrosageService {
   private apiUrl = 'http://localhost:3000/api/arrosage'; // Remplace par l’URL de ton backend
 
   // Ajouter une programmation d'arrosage
-  async ajouterArrosage(arrosageData: any) {
-    const { date, ...dataWithoutDate } = arrosageData;
+ // arrosage.service.ts
+async ajouterArrosage(arrosageData: any) {
+  const { date, ...dataWithoutDate } = arrosageData;
 
-    // Renommez les propriétés pour correspondre au modèle
-    const payload = {
-        typePlante: dataWithoutDate.type,
-        heureMatin: dataWithoutDate.morning,
-        heureSoir: dataWithoutDate.evening,
-        quantiteEau: dataWithoutDate.water
-    };
+  // Renommez les propriétés pour correspondre au modèle
+  const payload = {
+      date, // Inclure la date
+      typePlante: dataWithoutDate.type,
+      heureMatin: dataWithoutDate.morning,
+      heureSoir: dataWithoutDate.evening,
+      quantiteEau: dataWithoutDate.water
+  };
 
-    console.log('Données envoyées à l\'API :', payload); // Vérifiez ici
+  console.log('Données envoyées à l\'API :', payload); // Vérifiez ici
 
-    try {
-        const response = await axios.post(`${this.apiUrl}/`, payload);
-        return response.data;
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout de l\'arrosage :', error);
-        throw error;
-    }
+  try {
+      const response = await axios.post(`${this.apiUrl}/`, payload);
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'arrosage :', error);
+      throw error;
+  }
 }
   // Récupérer toutes les programmations d’arrosage
   async getAllArrosages() {
