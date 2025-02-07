@@ -23,7 +23,6 @@ export class LoginKerelEcoComponent implements OnInit {
   constructor(private apiService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.apiService.initializeWebSocket(); // Initialiser la connexion WebSocket
     this.listenToWebSocket(); // Écouter les messages WebSocket
   }
 
@@ -165,15 +164,19 @@ export class LoginKerelEcoComponent implements OnInit {
   listenToWebSocket(): void {
     const ws = new WebSocket('ws://localhost:3004');
     ws.onmessage = (event) => {
-      const scannedCard = event.data;
+
+      if (event.data !== '') 
+      {
+        const scannedCard = event.data;
       console.log('Carte scannée:', scannedCard);
       this.handleRFIDLogin(scannedCard);
+    }
   }}
 
   private handleRFIDLogin(rfidCardId: string): void {
     this.apiService.loginByCard(rfidCardId).then(
         response => {
-          if(response.token){
+          if(response.token !== null){
             this.router.navigate(['/dashboard']);
           }
         

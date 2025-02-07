@@ -16,6 +16,7 @@
         <th>Nom</th>
         <th>ID de l'utilisateur</th>
         <th>Email</th>
+        <th>Status</th>
         <th>assignation</th>
         <th>Actions</th>
       </tr>
@@ -28,11 +29,12 @@
         <td>{{ user.name }}</td>
         <td>{{ user.cardId }}</td>
         <td>{{ user.email }}</td>
+        <td>{{ user.status }}</td>
         <td>
           <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="openModalA(user.id)">
             {{ user.assignation }}
           </button>
-          <app-assign-card *ngIf="isModalAOpen" [userId]="selectedUserId"></app-assign-card>
+          <app-assign-card *ngIf="isModalAOpen" [isVisible]="isModalAOpen" [userId]="selectedUserId"></app-assign-card>
         </td>
         <td>
           <button class="btn ms-2" (click)="openModalM(user.id)" title="Modifier">
@@ -44,12 +46,12 @@
             <i class="fas fa-trash"></i>
             
           </button>
-          <app-suppression-modal *ngIf="isModalSOpen" [userId]="selectedUserId" (confirm)="onConfirmDelete()" (close)="closeModalS()"></app-suppression-modal>
+          <app-suppression-modal *ngIf="isModalSOpen" [userId]="selectedUserId" (close)="closeModalS()"></app-suppression-modal>
           <button class="btn ms-2" (click)="openModalB(user.id)" title="Bloquer">
             <i class="fas fa-ban"></i>
             
           </button>
-          <app-blocage-modal *ngIf="isModalBOpen" (confirm)="onConfirmBloq()" (close)="closeModalB()"></app-blocage-modal>
+          <app-blocage-modal *ngIf="isModalBOpen" [userId]="selectedUserId" (close)="closeModalB()"></app-blocage-modal>
         </td>
       </tr>
     </tbody>

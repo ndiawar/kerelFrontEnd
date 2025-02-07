@@ -73,12 +73,12 @@ export class UserService {
   }
 
   async bloquerUtilisateur(id: number): Promise<any> {
-    const response = await this.axiosInstance.put('/utilisateurs/bloquer', { id });
+    const response = await this.axiosInstance.put(`/utilisateurs/bloquer/${id}`);
     return response.data;
   }
 
   async debloquerUtilisateur(id: number): Promise<any> {
-    const response = await this.axiosInstance.put('/utilisateurs/debloquer', { id });
+    const response = await this.axiosInstance.put(`/utilisateurs/debloquer/${id}`);
     return response.data;
   }
 
@@ -98,26 +98,7 @@ export class UserService {
     return localStorage.getItem('token');
   }
 
-  initializeWebSocket() {
-    this.socket = new WebSocket('ws://localhost:3004');
-
-    this.socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.cardID) { // Ajout d'une vérification
-          this.socketMessages$.next({ type: 'card', cardID: message.cardID });
-      } else if (message.mode) {
-          this.socketMessages$.next({ type: 'mode', mode: message.mode });
-      }
-  };
-
-    this.socket.onerror = (error) => {
-        console.error('Erreur WebSocket :', error);
-    };
-
-    this.socket.onclose = () => {
-        console.warn('WebSocket déconnecté.');
-    };
-}
+  
 
 async loginByCard(rfid_code: string): Promise<any> {
   const response = await this.axiosInstance.post('/utilisateurs/loginByCard', { rfid_code });

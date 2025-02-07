@@ -18,6 +18,7 @@ import { BlocageModalComponent } from '../../pages/blocage-modal/blocage-modal.c
 })
 export class UserListComponent implements OnInit{
   @ViewChild(BlocageModalComponent) blocageModal!: BlocageModalComponent;
+  
   isModalOpen = false;
   isModalMOpen = false;
   isModalSOpen = false;
@@ -41,6 +42,7 @@ export class UserListComponent implements OnInit{
           name: `${user.prenom} ${user.nom}`,
           cardId: user.rfid_code || '---',
           email: user.email || '---',
+          status: user.status,
           assignation: user.rfid_code ? 'désassigner la carte' : 'assigner une carte',
           selected: false,
         }));
