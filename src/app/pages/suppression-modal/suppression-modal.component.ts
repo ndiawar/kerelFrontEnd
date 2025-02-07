@@ -1,35 +1,43 @@
-import { NgIf } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { UserService } from "../../services/UserServices";
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-suppression-modal',
   standalone: true,
-  imports: [ NgIf ],
+  imports: [  ],
   templateUrl: './suppression-modal.component.html',
   styleUrl: './suppression-modal.component.css'
 })
 export class SuppressionModalComponent {
 
+  @Input() userId: number | null = null;
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
   showModal: boolean = false;
 
-  // open() {
-  //   this.showModal = true;
-  // }
+  constructor(private userService: UserService) {}
 
-  // close() {
-  //   this.showModal = false;
-  // }
+
 
   onConfirm() {
-    this.confirm.emit();
-    this.showModal = false;
+    // this.confirm.emit();
+    if (this.userId !== null) {
+      console.log('Suppression de l\'utilisateur:', this.userId);
+      this.userService.deleteUtilisateur(this.userId).then(
+        (response) => {
+          console.log('Utilisateur supprimé avec succès:', response);
+          this.confirm.emit();
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+        }
+      );
+
   }
+}
 
   onCancel() {
-    this.cancel.emit();
-    this.showModal = false;
+    this.confirm.emit();
   }
 }

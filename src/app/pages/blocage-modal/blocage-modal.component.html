@@ -1,4 +1,4 @@
-<div (click)="$event.stopPropagation()" class="modal">
+<div *ngIf="showModal" (click)="$event.stopPropagation()" class="modal">
     <div class="modal-content">
       <div class="modal-icon">
         <span>&#10060;</span>

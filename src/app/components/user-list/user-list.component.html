@@ -39,12 +39,12 @@
             <i class="fas fa-pencil-alt"></i>
         
           </button>
-          <app-modification-modal *ngIf="isModalMOpen" (close)="closeModalM()"></app-modification-modal>
+          <app-modification-modal *ngIf="isModalMOpen" [userId]="selectedUserId" (close)="closeModalM()"></app-modification-modal>
           <button class="btn ms-2" (click)="openModalS(user.id)" title="Supprimer">
             <i class="fas fa-trash"></i>
             
           </button>
-          <app-suppression-modal *ngIf="isModalSOpen" (confirm)="onConfirmDelete()" (close)="closeModalS()"></app-suppression-modal>
+          <app-suppression-modal *ngIf="isModalSOpen" [userId]="selectedUserId" (confirm)="onConfirmDelete()" (close)="closeModalS()"></app-suppression-modal>
           <button class="btn ms-2" (click)="openModalB(user.id)" title="Bloquer">
             <i class="fas fa-ban"></i>
             

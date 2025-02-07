@@ -5,10 +5,10 @@
     <h2>Modification</h2>
   </div>
 
-  <form (ngSubmit)="onSubmit()" #inscriptionForm="ngForm">
+  <form (ngSubmit)="onSubmit(modificationForm)" #modificationForm="ngForm">
     <div class="form-group">
       <label for="prenom">Prénom<span>*</span></label>
-      <input type="text" id="prenom" name="prenom" ngModel required 
+      <input type="text" id="prenom" name="prenom" [(ngModel)]="user.prenom" required 
              pattern="^(?! )[A-Za-z]+( [A-Za-z]+)*$" 
              #prenom="ngModel"
              (input)="prenom.control.markAsTouched()">
@@ -19,7 +19,7 @@
 
     <div class="form-group">
       <label for="nom">Nom<span>*</span></label>
-      <input type="text" id="nom" name="nom" ngModel required 
+      <input type="text" id="nom" name="nom" [(ngModel)]="user.nom" required 
              pattern="^(?! )[A-Za-z]+( [A-Za-z]+)*$" 
              #nom="ngModel"
              (input)="nom.control.markAsTouched()">
@@ -30,7 +30,7 @@
 
     <div class="form-group">
       <label for="telephone">Téléphone<span>*</span></label>
-      <input type="tel" id="telephone" name="telephone" ngModel required 
+      <input type="tel" id="telephone" name="telephone" [(ngModel)]="user.telephone" required 
              pattern="^(70|75|77|78|76)[0-9]{7}$" 
              #telephone="ngModel"
              (input)="telephone.control.markAsTouched()">
@@ -41,7 +41,7 @@
 
     <div class="form-group">
       <label for="numeroCarte">Email<span>*</span></label>
-      <input type="email" id="numeroCarte" name="numeroCarte" ngModel required 
+      <input type="email" id="numeroCarte" name="numeroCarte" [(ngModel)]="user.email" required 
              pattern="^[A-Za-z]{2,}@[A-Za-z]+\.[A-Za-z]{1,}$" 
              #numeroCarte="ngModel"
              (input)="numeroCarte.control.markAsTouched()">
@@ -52,7 +52,7 @@
 
 
     <div class="modal-actions">
-      <button type="submit" [disabled]="!inscriptionForm.valid" class="btn btn-validate">Valider</button>
+      <button type="submit" [disabled]="!modificationForm.valid" class="btn btn-validate">Valider</button>
       <button type="button" class="btn btn-cancel" (click)="closeModal()">Annuler</button>
     </div>
   </form>

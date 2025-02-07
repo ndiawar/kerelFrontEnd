@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 
@@ -17,6 +17,7 @@ import { BlocageModalComponent } from '../../pages/blocage-modal/blocage-modal.c
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit{
+  @ViewChild(BlocageModalComponent) blocageModal!: BlocageModalComponent;
   isModalOpen = false;
   isModalMOpen = false;
   isModalSOpen = false;
@@ -86,6 +87,7 @@ export class UserListComponent implements OnInit{
   openModalB(userId: number): void {
     this.selectedUserId = userId;
     this.isModalBOpen = true;
+    this.blocageModal.open();
   }
 
   closeModalB(): void {

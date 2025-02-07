@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class AssignCardComponent {
   // @Input() isOpen: boolean = false; // Réception de l'état du modal
+  @Input() userId: number | null = null;
   @Output() close = new EventEmitter<void>(); // Événement pour fermer
 
   closeModal() {
