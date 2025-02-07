@@ -23,6 +23,7 @@ export class UserListComponent implements OnInit{
   isModalBOpen = false;
   isModalAOpen = false;
   users: any[] = [];
+  selectedUserId: number | null = null;
   
 
   constructor(private userService: UserService) {}
@@ -35,9 +36,10 @@ export class UserListComponent implements OnInit{
     this.userService.getAllUtilisateurs().then(
       (response) => {
         this.users = response.map((user: any) => ({
+          id: user.id,
           name: `${user.prenom} ${user.nom}`,
           cardId: user.rfid_code || '---',
-          email: user.email,
+          email: user.email || '---',
           assignation: user.rfid_code ? 'désassigner la carte' : 'assigner une carte',
           selected: false,
         }));
@@ -53,49 +55,58 @@ export class UserListComponent implements OnInit{
     this.users.forEach(user => user.selected = checked);
   }
 
-  openModal() {
+  openModal(): void {
     this.isModalOpen = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.isModalOpen = false;
   }
 
-  openModalM() {
+  openModalM(userId: number): void {
+    this.selectedUserId = userId;
     this.isModalMOpen = true;
   }
 
-  closeModalM() {
+  closeModalM(): void {
     this.isModalMOpen = false;
+    this.selectedUserId = null;
   }
-  openModalS() {
+
+  openModalS(userId: number): void {
+    this.selectedUserId = userId;
     this.isModalSOpen = true;
   }
 
-  closeModalS() {
+  closeModalS(): void {
     this.isModalSOpen = false;
+    this.selectedUserId = null;
   }
 
-  openModalA() {
+  openModalB(userId: number): void {
+    this.selectedUserId = userId;
+    this.isModalBOpen = true;
+  }
+
+  closeModalB(): void {
+    this.isModalBOpen = false;
+    this.selectedUserId = null;
+  }
+
+  openModalA(userId: number): void {
+    this.selectedUserId = userId;
     this.isModalAOpen = true;
   }
 
-  closeModalA() {
+  closeModalA(): void {
     this.isModalAOpen = false;
+    this.selectedUserId = null;
   }
 
   onConfirmDelete() {
     // Logique pour la suppression ou autres actions
     console.log('Suppression confirmée');
     this.closeModalS();
-  }
-
-  openModalB() {
-    this.isModalBOpen = true;
-  }
-
-  closeModalB() {
-    this.isModalBOpen = false;
   }
 
   onConfirmBloq() {

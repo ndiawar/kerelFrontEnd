@@ -29,23 +29,23 @@
         <td>{{ user.cardId }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="openModalA()">
+          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="openModalA(user.id)">
             {{ user.assignation }}
           </button>
-          <app-assign-card *ngIf="isModalAOpen"></app-assign-card>
+          <app-assign-card *ngIf="isModalAOpen" [userId]="selectedUserId"></app-assign-card>
         </td>
         <td>
-          <button class="btn ms-2" (click)="openModalM()" title="Modifier">
+          <button class="btn ms-2" (click)="openModalM(user.id)" title="Modifier">
             <i class="fas fa-pencil-alt"></i>
         
           </button>
           <app-modification-modal *ngIf="isModalMOpen" (close)="closeModalM()"></app-modification-modal>
-          <button class="btn ms-2" (click)="openModalS()" title="Supprimer">
+          <button class="btn ms-2" (click)="openModalS(user.id)" title="Supprimer">
             <i class="fas fa-trash"></i>
             
           </button>
           <app-suppression-modal *ngIf="isModalSOpen" (confirm)="onConfirmDelete()" (close)="closeModalS()"></app-suppression-modal>
-          <button class="btn ms-2" (click)="openModalB()" title="Bloquer">
+          <button class="btn ms-2" (click)="openModalB(user.id)" title="Bloquer">
             <i class="fas fa-ban"></i>
             
           </button>

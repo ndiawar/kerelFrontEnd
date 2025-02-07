@@ -26,7 +26,6 @@ export class UserService {
 
   async getAllUtilisateurs(): Promise<any> {
     const response = await this.axiosInstance.get('/utilisateurs');
-  // Méthode pour récupérer le token de localStorage en toute sécurité
     return response.data;
   }
 
