@@ -7,7 +7,6 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { LoginKerelEcoComponent } from './pages/login-kerel-eco/login-kerel-eco.component';
 
 
-
 // Définissez vos itinéraires ici. Chaque route doit correspondre à un composant.
 export const routes: Routes = [
     { path: '', component: LoginKerelEcoComponent },

@@ -32,7 +32,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   { icon: '🌡️', title: 'Temp.', value: '...', unit: 'Celsius (°C)' }
 ];
 
-
   temperature: number = 0;
   weatherCondition: string = '';
   weatherIcon: string = '';
@@ -48,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   temperature_sensor: number | null = null;
   ph: number | null = null;
   humidity_sensor: number | null = null;
-  waterVolume: number | null = null;
+  waterLevel: number | null = null;
 
 
   constructor(
@@ -69,16 +68,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // Récupère la météo de Dakar
       this.getWeather();
 
-      // Connexion au WebSocket pour recevoir les données des capteurs
       this.webSocketService.connect('ws://localhost:8080').subscribe(data => {
         this.temperature_sensor = data.temperature || null;
         this.ph = data.ph || null;
         this.humidity_sensor = data.humidity || null;
-        this.waterVolume = data.water_level || null;
+        this.waterLevel = data.waterLevel || null;
 
-        // Mettez à jour les métriques avec les données reçues
+        // Mettre à jour l'affichage
         this.updateMetrics();
       });
+
     }
   }
   ngOnDestroy() {
@@ -135,9 +134,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   private updateMetrics() {
-    // Mettez à jour les valeurs dynamiques des métriques
+    console.log('Mise à jour des métriques:', { waterLevel: this.waterLevel, humidity_sensor: this.humidity_sensor, ph: this.ph, temperature_sensor: this.temperature_sensor });
+
     this.metrics = [
-      { icon: '🌊', title: 'Volume Eau', value: this.waterVolume !== null ? `${this.waterVolume} L` : '...', unit: 'Litre (L)' },
+      { icon: '🌊', title: 'Volume Eau', value: this.waterLevel !== null ? `${this.waterLevel} L` : '0', unit: 'Litre (L)' },
       { icon: '💧', title: 'Humidité', value: this.humidity_sensor !== null ? `${this.humidity_sensor} %` : '...', unit: '%HR' },
       { icon: '🌱', title: 'pH du sol', value: this.ph !== null ? `${this.ph}` : '...', unit: 'Agriculture' },
       { icon: '🌡️', title: 'Temp.', value: this.temperature_sensor !== null ? `${this.temperature_sensor}°C` : '...', unit: 'Celsius (°C)' }
