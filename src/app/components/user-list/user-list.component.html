@@ -51,6 +51,8 @@
             {{ user.assignation }}
           </button>
           <app-assign-card *ngIf="isModalAOpen" [isVisible]="isModalAOpen" [userId]="selectedUserId" (visibilityChange)="closeModalA()" ></app-assign-card>
+          
+          
         </td>
         <td>
           <button class="btn ms-2" (click)="openModalM(user.id)" title="Modifier">
@@ -75,4 +77,6 @@
   <div class="d-flex justify-content-center mt-3">
     <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
   </div>
+
+  <app-desassigner-modal *ngIf="isModalUnassignOpen" [isVisible]="isModalUnassignOpen" [userId]="selectedUserId" (confirm)="closeModalUnassign()" (cancel)="closeModalUnassign()"></app-desassigner-modal>
 </div>

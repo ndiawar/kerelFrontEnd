@@ -98,6 +98,11 @@ export class UserService {
     return localStorage.getItem('token');
   }
 
+  // Fonction pour récupérer les données utilisateur depuis le localStorage
+  // getUser(): string | null {
+  //   return localStorage.getItem('user');
+  // }
+
   
 
 async loginByCard(rfid_code: string): Promise<any> {

@@ -9,12 +9,13 @@ import { InscriptionModalComponent } from '../../pages/inscription-modal/inscrip
 import { ModificationModalComponent } from '../../pages/modification-modal/modification-modal.component';
 import { SuppressionModalComponent } from '../../pages/suppression-modal/suppression-modal.component';
 import { BlocageModalComponent } from '../../pages/blocage-modal/blocage-modal.component';
+import { DesassignerModalComponent } from '../../pages/desassigner-modal/desassigner-modal.component';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   standalone:true,
-  imports: [CommonModule,FormsModule, InscriptionModalComponent, ModificationModalComponent, SuppressionModalComponent, BlocageModalComponent, AssignCardComponent, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, InscriptionModalComponent, DesassignerModalComponent, ModificationModalComponent, SuppressionModalComponent, BlocageModalComponent, NgxPaginationModule, AssignCardComponent],
   styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit{
@@ -82,6 +83,7 @@ export class UserListComponent implements OnInit{
   }
 
   openModalUnassign(userId: number): void {
+    console.log('Ouverture du modal désassigner pour l’utilisateur', userId);
     this.selectedUserId = userId;
     this.isModalUnassignOpen = true;
   }
@@ -94,7 +96,7 @@ export class UserListComponent implements OnInit{
   handleAssignButtonClick(userId: number, assignation: string): void {
     if (assignation === 'assigner une carte') {
       this.openModalA(userId);
-    } else {
+    } else if (assignation === 'désassigner la carte') {
       this.openModalUnassign(userId);
     }
   }
@@ -186,17 +188,5 @@ export class UserListComponent implements OnInit{
   closeModalA(): void {
     this.isModalAOpen = false;
     this.selectedUserId = null;
-  }
-
-  onConfirmDelete() {
-    // Logique pour la suppression ou autres actions
-    console.log('Suppression confirmée');
-    this.closeModalS();
-  }
-
-  onConfirmBloq() {
-    // Logique pour la suppression ou autres actions
-    console.log('Blocage confirmée');
-    this.closeModalS();
   }
 }

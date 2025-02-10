@@ -35,8 +35,12 @@
         Maximum 4 chiffres autorisés.
       </div>
 
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
       <div *ngIf="showError2" class="text-danger text-center fs-6 mt-3">
-        Code incorrect.
+        Code invalide.
       </div>
     </div>
   </div>
