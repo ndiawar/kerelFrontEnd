@@ -6,6 +6,7 @@ import { ArrosageService } from '../../services/arrosage.service';
 type PlantType = 'tropicales' | 'maraicheres' | 'legumineuses' | 'cereales';
 
 export interface Plant {
+  id?: string; // Ajoutez cette ligne
   type?: PlantType;
   morning?: string;
   evening?: string;
@@ -38,28 +39,46 @@ export class ArrosageComponent implements OnInit {
     await this.loadArrosages(); // Charger les arrosages lors de l'initialisation
   }
 
-  // Charger les programmations existantes depuis l’API
   async loadArrosages() {
     try {
       this.plants = await this.arrosageService.getAllArrosages();
-      console.log('Données chargées :', this.plants); // Afficher les données dans la console
+      console.log('Données chargées :', this.plants);
     } catch (error) {
       console.error('Erreur lors du chargement des arrosages', error);
     }
+  }async submitPlant() {
+    const { date, ...dataWithoutDate } = this.newPlant;
+
+    try {
+      if (this.newPlant.id) { // Si l'ID existe, c'est une mise à jour
+        const response = await this.arrosageService.updateArrosage(this.newPlant);
+        this.plants = this.plants.map(p => p.id === response.arrosage._id ? response.arrosage : p);
+      } else { // Sinon, c'est un ajout
+        const response = await this.arrosageService.ajouterArrosage(this.newPlant);
+        this.plants.push(response);
+      }
+
+      this.newPlant = { date: this.today }; // Réinitialiser newPlant
+      this.errorMessage = ''; // Réinitialiser le message d'erreur
+    } catch (error: any) { // Spécifier le type d'erreur
+      this.errorMessage = error.message; // Afficher l'erreur à l'utilisateur
+      console.error('Erreur lors de l’ajout ou de la mise à jour de la plante', error);
+    }
   }
 
-  // Ajouter une nouvelle programmation d’arrosage
+
   async addPlant() {
     const { date, ...dataWithoutDate } = this.newPlant;
 
     if (this.validateHours()) {
       if (dataWithoutDate.type && dataWithoutDate.water !== undefined) {
         try {
-          const response = await this.arrosageService.ajouterArrosage(this.newPlant); // Envoyer newPlant avec date
-          this.plants.push(response); // Ajouter la nouvelle programmation à la liste
-          this.newPlant = { date: this.today }; // Réinitialiser newPlant
+          const response = await this.arrosageService.ajouterArrosage(this.newPlant);
+          this.plants.push(response);
+          this.newPlant = { date: this.today };
           this.errorMessage = ''; // Réinitialiser le message d'erreur
-        } catch (error) {
+        } catch (error: any) { // Spécifier le type d'erreur
+          this.errorMessage = error.message; // Afficher l'erreur à l'utilisateur
           console.error('Erreur lors de l’ajout de la plante', error);
         }
       }
@@ -67,36 +86,44 @@ export class ArrosageComponent implements OnInit {
       this.errorMessage = 'Erreur sur la configuration de l\'heure, veuillez réessayer.';
     }
   }
-
-  // Validation des heures// Validation des heures
-validateHours(): boolean {
-  if (this.newPlant.morning && this.newPlant.evening) {
+  validateHours(): boolean {
+    if (this.newPlant.morning && this.newPlant.evening) {
       const morningHour = this.newPlant.morning;
       const eveningHour = this.newPlant.evening;
 
-      // Vérifie que l'heure du matin est inférieure à l'heure du soir
       const isValidMorningEvening = morningHour < eveningHour;
-
-      // Vérifie que l'heure du matin n'est pas entre 15h00 et 03h00
       const isValidMorning = !(this.isBetween(morningHour, '15:00', '03:00'));
-
-      // Vérifie que l'heure du soir n'est pas entre 03h00 et 15h00
       const isValidEvening = !(this.isBetween(eveningHour, '03:00', '15:00'));
 
       return isValidMorningEvening && isValidMorning && isValidEvening;
+    }
+    return false;
   }
-  return false; // Si l'une des heures est manquante, retournez faux
-}
 
-// Méthode pour vérifier si une heure est entre deux heures
-isBetween(hour: string, start: string, end: string): boolean {
-  if (start < end) {
-      return hour >= start && hour <= end;
-  } else {
-      // Gère le cas où l'intervalle traverse minuit
-      return hour >= start || hour <= end;
+  get totalPages(): number {
+    return Math.ceil(this.plants.length / this.pageSize);
   }
-}
+
+  nextPage() {
+    if (this.page < this.totalPages) {
+      this.page++;
+    }
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+    }
+  }
+
+  isBetween(hour: string, start: string, end: string): boolean {
+    if (start < end) {
+      return hour >= start && hour <= end;
+    } else {
+      return hour >= start || hour <= end;
+    }
+  }
+
   get paginatedPlants() {
     const start = (this.page - 1) * this.pageSize;
     const end = start + this.pageSize;
@@ -111,16 +138,40 @@ isBetween(hour: string, start: string, end: string): boolean {
   };
 
   getHumidity(type: PlantType): number {
-    return this.humidityMap[type] || 0; // Retourne 0 si le type n'est pas trouvé
+    return this.humidityMap[type] || 0;
   }
 
   capitalize(input: string): string {
     return input ? input.charAt(0).toUpperCase() + input.slice(1) : '';
   }
 
-  // Méthode pour gérer le changement de type de plante
   onTypeChange(selectedType: PlantType) {
     console.log('Type de plante sélectionné:', selectedType);
-    this.newPlant.type = selectedType; // Mettre à jour newPlant.type
+    this.newPlant.type = selectedType;
+  }
+
+  // Nouvelle méthode pour éditer une plante
+ // Modifier la méthode editPlant pour permettre la mise à jour
+ async editPlant(plant: Plant) {
+  this.newPlant = { ...plant }; // Remplir newPlant avec les données de la plante sélectionnée
+
+  try {
+    const updatedPlant = await this.arrosageService.updateArrosage(this.newPlant);
+    this.plants = this.plants.map(p => p.id === updatedPlant.arrosage._id ? updatedPlant.arrosage : p);
+  } catch (error: any) { // Spécifier le type d'erreur
+    console.error('Erreur lors de la mise à jour de la plante', error);
+  }
+}
+
+
+  // Nouvelle méthode pour supprimer une plante
+
+  async deletePlant(plant: Plant) {
+    try {
+      await this.arrosageService.supprimerArrosage(plant); // Suppression via le service
+      this.plants = this.plants.filter(p => p !== plant); // Retirer la plante de la liste
+    } catch (error: any) { // Spécifier le type d'erreur
+      console.error('Erreur lors de la suppression de la plante', error);
+    }
   }
 }

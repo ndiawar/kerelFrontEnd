@@ -1,19 +1,35 @@
-import {
-  OnInit,
-  OnDestroy,
-  Component,
-  Inject,
-  PLATFORM_ID,
-} from '@angular/core';
+import { OnInit, OnDestroy, Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MeteoService } from '../../services/meteo.service';
 import { LogAccordionComponent } from '../log-accordion/log-accordion.component';
 import { GraphsComponent } from '../graphs/graphs.component';
-import { SensorService } from '../../services/sensor.service'; // Utilisation du service sensor
+import { SensorService } from '../../services/sensor.service'; // Utilisation du service capteur
 import { PumpeService } from '../../services/pompe.service';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, from, throwError } from 'rxjs';
+import { timeout, catchError } from 'rxjs/operators';
+
+// Définition d'une interface pour les données météo
+interface WeatherData {
+  list: Array<{
+    main: {
+      temp: number;
+      humidity: number;
+      pressure: number;
+    };
+    weather: Array<{
+      description: string;
+      icon: string;
+    }>;
+    clouds: {
+      all: number;
+    };
+    wind: {
+      speed: number;
+    };
+  }>;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -95,7 +111,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getWeather(): void {
-    this.meteoService.getWeather().then((data) => {
+    from(this.meteoService.getWeather()).pipe(  // Convertir la promesse en observable
+      timeout(5000),  // Timeout de 5 secondes
+      catchError(err => {
+        console.error('Erreur lors de la récupération de la météo', err);
+        this.weatherAlert = "⚠️ Problème de connexion avec les données météo.";
+        return throwError(err);
+      })
+    ).subscribe((data: WeatherData) => {  // Utilisation du type WeatherData pour 'data'
       if (data && data.list && data.list.length > 0) {
         const currentWeather = data.list[0];
 
@@ -111,8 +134,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       } else {
         console.error('Données météo invalides ou vides', data);
       }
-    }, (error) => {
-      console.error('Erreur lors de la récupération de la météo', error);
     });
   }
 
