@@ -61,16 +61,20 @@
         <div class="card-body">
           <div class="row g-2">
             <!-- Volume Eau -->
-            <div class="col-12">
-              <div class="metric-card text-center pt-5 justify-content-center align-items-center">
-                <i class="bi bi-cloud-rain"></i>
-                <div class="metric-icon mb-2"> Arrossage </div>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                  <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
-                </div>
+            <!-- Volume Eau -->
+          <div class="col-12">
+            <div class="metric-card text-center pt-5 justify-content-center align-items-center">
+              <i class="bi bi-cloud-rain"></i>
+              <div class="metric-icon mb-2"> Arrossage </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" [(ngModel)]="pumpOn" (change)="togglePump()">
+                <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
               </div>
+              <div>{{ pumpState }}</div>
+              <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
             </div>
+          </div>
+
 
             <!-- Humidité -->
             <div class="col-12">
