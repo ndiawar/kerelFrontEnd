@@ -3,7 +3,7 @@
       <div class="modal-icon">
         <span>&#10060;</span>
       </div>
-      <p>Êtes-vous sûr de vouloir bloquer ?</p>
+      <p>Êtes-vous sûr de vouloir {{ user?.status === 'inactive' ? 'débloquer' : 'bloquer' }} cet utilisateur ?</p>
       <div class="modal-buttons">
         <button class="btn confirm" (click)="onConfirm()">Confirmer</button>
         <button class="btn cancel" (click)="onCancel()">Annuler</button>

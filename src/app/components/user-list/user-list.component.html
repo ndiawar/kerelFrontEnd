@@ -1,11 +1,27 @@
 <div class="container">
   <h1>Gestion des utilisateurs</h1>
-  <div class="d-flex justify-content-end mb-3"> <!-- Utilisez justify-content-end pour aligner à droite -->
+  <div class="d-flex justify-content-between align-items-center mb-3"> <!-- Utilisez justify-content-end pour aligner à droite -->
+    <input 
+      type="text" 
+      class="form-control search-bar" 
+      style="max-width: 400px;"
+      placeholder="Rechercher par nom, prénom, numéro carte" 
+      [(ngModel)]="searchQuery" 
+      (input)="filterUsers()"
+    />
+    <div>
     <button class="btn btn-add" (click)="openModal()">
       <i class="fas fa-plus"></i> Ajouter un utilisateur
     </button>
+    <button 
+        class="btn btn-danger me-2" 
+        (click)="deleteSelectedUsers()" 
+        [disabled]="!hasSelectedUsers()">
+        <i class="fas fa-trash"></i> Supprimer plusieurs
+      </button>
     <app-inscription-modal *ngIf="isModalOpen" (close)="closeModal()"></app-inscription-modal>
   </div>
+</div>
 
   <table class="table">
     <thead>
@@ -14,7 +30,7 @@
           <input type="checkbox" (change)="toggleSelectAll($event)" />
         </th>
         <th>Nom</th>
-        <th>ID de l'utilisateur</th>
+        <th>Numero de Carte</th>
         <th>Email</th>
         <th>Status</th>
         <th>assignation</th>
@@ -22,19 +38,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users">
+      <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
         <td>
-          <input type="checkbox" [(ngModel)]="user.selected" />
+          <input type="checkbox" [(ngModel)]="user.selected"  />
         </td>
         <td>{{ user.name }}</td>
         <td>{{ user.cardId }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.status }}</td>
         <td>
-          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="openModalA(user.id)">
+          <button [ngClass]="{'btn-outline-success': user.assignation === 'assigner une carte', ' btn-outline-danger': user.assignation === 'désassigner la carte'}" (click)="handleAssignButtonClick(user.id, user.assignation)">
             {{ user.assignation }}
           </button>
-          <app-assign-card *ngIf="isModalAOpen" [isVisible]="isModalAOpen" [userId]="selectedUserId"></app-assign-card>
+          <app-assign-card *ngIf="isModalAOpen" [isVisible]="isModalAOpen" [userId]="selectedUserId" (visibilityChange)="closeModalA()" ></app-assign-card>
         </td>
         <td>
           <button class="btn ms-2" (click)="openModalM(user.id)" title="Modifier">
@@ -46,14 +62,17 @@
             <i class="fas fa-trash"></i>
             
           </button>
-          <app-suppression-modal *ngIf="isModalSOpen" [userId]="selectedUserId" (close)="closeModalS()"></app-suppression-modal>
+          <app-suppression-modal *ngIf="isModalSOpen" [userId]="selectedUserId" (cancel)="closeModalS()"></app-suppression-modal>
           <button class="btn ms-2" (click)="openModalB(user.id)" title="Bloquer">
             <i class="fas fa-ban"></i>
             
           </button>
-          <app-blocage-modal *ngIf="isModalBOpen" [userId]="selectedUserId" (close)="closeModalB()"></app-blocage-modal>
+          <app-blocage-modal *ngIf="isModalBOpen" [userId]="selectedUserId" (cancel)="closeModalB()"></app-blocage-modal>
         </td>
       </tr>
     </tbody>
   </table>
+  <div class="d-flex justify-content-center mt-3">
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
 </div>

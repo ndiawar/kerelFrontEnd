@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { UserService } from '../services/UserServices';
+import { UserService } from '../../services/UserServices';
 import Swal from 'sweetalert2';
 
 @Component({
