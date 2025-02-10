@@ -9,7 +9,7 @@ import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MeteoService } from '../../services/meteo.service';  // Import du service météo
 import { LogAccordionComponent } from '../log-accordion/log-accordion.component';
 import { GraphsComponent } from '../graphs/graphs.component'; //
-import { WebSocketService } from '../../services/websocket.service'; // Importer le service WebSocket
+import { CapteurService } from '../../services/capteur.service';  // Importer le service Capteur
 
 @Component({
   selector: 'app-dashboard',
@@ -23,25 +23,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();
   private timer: any;
   private userLocale: string = 'fr-FR';  // Par défaut, on commence avec 'fr-FR'
-  // Définition des cartes avec leurs informations dynamiques
- // Définition des cartes avec des valeurs initiales vides
- metrics = [
-  { icon: '🌊', title: 'Volume Eau', value: '...', unit: 'Litre (L)' },
-  { icon: '💧', title: 'Humidité', value: '...', unit: '%HR' },
-  { icon: '🌱', title: 'pH du sol', value: '...', unit: 'Agriculture' },
-  { icon: '🌡️', title: 'Temp.', value: '...', unit: 'Celsius (°C)' }
-];
+  metrics = [
+    { icon: '🌊', title: 'Volume Eau', value: '...', unit: 'Litre (L)' },
+    { icon: '💧', title: 'Humidité', value: '...', unit: '%HR' },
+    { icon: '🌱', title: 'pH du sol', value: '...', unit: 'Agriculture' },
+    { icon: '🌡️', title: 'Temp.', value: '...', unit: 'Celsius (°C)' }
+  ];
 
   temperature: number = 0;
   weatherCondition: string = '';
   weatherIcon: string = '';
-  cloudiness: number = 0; // Ajout de la couverture nuageuse
-  windSpeed: number = 0; // Vitesse du vent
-  pressure: number = 0;  // Pression atmosphérique
-  weatherAlert: string = '';  // Alerte météo
-  humidity: number = 0;  // Ajout de l'humidité
-
-
+  cloudiness: number = 0;
+  windSpeed: number = 0;
+  pressure: number = 0;
+  weatherAlert: string = '';
+  humidity: number = 0;
 
   // Propriétés pour stocker les données des capteurs
   temperature_sensor: number | null = null;
@@ -49,26 +45,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   humidity_sensor: number | null = null;
   waterLevel: number | null = null;
 
-
   constructor(
     private datePipe: DatePipe,
     @Inject(PLATFORM_ID) private platformId: Object,
     private meteoService: MeteoService,  // Injection du service météo
-    private webSocketService: WebSocketService // Injecter le service WebSocket
+    private capteurService: CapteurService  // Injection du service Capteur
   ) {}
 
   ngOnInit() {
-    // Vérifie si la plateforme est un navigateur
     if (isPlatformBrowser(this.platformId)) {
-      // Met à jour la date toutes les secondes
       this.timer = setInterval(() => {
         this.currentDate = new Date();
       }, 1000);
 
-      // Récupère la météo de Dakar
       this.getWeather();
 
-      this.webSocketService.connect('ws://localhost:8080').subscribe(data => {
+      // Récupérer les données des capteurs toutes les 5 secondes
+      this.capteurService.getRealTimeSensorData().subscribe(data => {
         this.temperature_sensor = data.temperature || null;
         this.ph = data.ph || null;
         this.humidity_sensor = data.humidity || null;
@@ -77,18 +70,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         // Mettre à jour l'affichage
         this.updateMetrics();
       });
-
     }
   }
+
   ngOnDestroy() {
-    // Nettoie l'intervalle lorsque le composant est détruit
     if (this.timer) {
       clearInterval(this.timer);
     }
-
-    // Fermer la connexion WebSocket lors de la destruction du composant
-    this.webSocketService.close();
   }
+
   private getWeather(): void {
     this.meteoService.getWeather().then(
       (data) => {
@@ -98,12 +88,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.temperature = currentWeather.main.temp;
           this.weatherCondition = currentWeather.weather[0]?.description || '';
           this.weatherIcon = `https://openweathermap.org/img/wn/${currentWeather.weather[0]?.icon}.png`;
-          this.humidity = currentWeather.main.humidity;  // Humidité
-          this.cloudiness = currentWeather.clouds.all;  // Couverture nuageuse
-          this.windSpeed = currentWeather.wind.speed;  // Vitesse du vent
-          this.pressure = currentWeather.main.pressure;  // Pression
+          this.humidity = currentWeather.main.humidity;
+          this.cloudiness = currentWeather.clouds.all;
+          this.windSpeed = currentWeather.wind.speed;
+          this.pressure = currentWeather.main.pressure;
 
-          // Vérification des conditions météo pour générer une alerte
           if (this.weatherCondition.includes('pluie')) {
             this.weatherAlert = "🌧️ Il risque de pleuvoir, l'arrosage automatique doit être désactivé.";
           } else if (this.weatherCondition.includes('orage')) {
@@ -112,12 +101,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.weatherAlert = "💨 Vent fort détecté ! Arrosage doit etre réduit pour éviter l'évaporation.";
           } else if (this.weatherCondition.includes('brouillard') || this.weatherCondition.includes('brume')) {
             this.weatherAlert = "🌫️ Brouillard détecté. Vérifiez l'humidité avant d'arroser.";
-          }  else if (this.temperature < 20) {
-            // Alerte pour les températures froides
+          } else if (this.temperature < 20) {
             this.weatherAlert = "❄️ Température froide détectée ! L'arrosage doit etre désactivé pour éviter les dommages aux racines.";
           } else if (this.weatherCondition.includes('dégagé') && this.temperature > 29) {
             this.weatherAlert = "☀️ Forte chaleur détectée, augmentation de l'arrosage recommandée.";
-          }else if (this.weatherCondition.includes('nuageux')) {
+          } else if (this.weatherCondition.includes('nuageux')) {
             this.weatherAlert = "☁️ Temps nuageux, surveillez l'humidité.";
           } else {
             this.weatherAlert = "✅ Météo favorable, arrosage normal.";
@@ -131,7 +119,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     );
   }
-
 
   private updateMetrics() {
     console.log('Mise à jour des métriques:', { waterLevel: this.waterLevel, humidity_sensor: this.humidity_sensor, ph: this.ph, temperature_sensor: this.temperature_sensor });
