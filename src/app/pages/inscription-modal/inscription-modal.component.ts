@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../../services/UserServices';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -37,13 +38,25 @@ export class InscriptionModalComponent {
       this.userService.createUtilisateur(formData).then(
         response => {
           console.log('Formulaire soumis avec succès:', response);
-          alert('Formulaire soumis avec succès!');
           this.closeModal(); // Fermer le modal après la soumission
+          Swal.fire({
+            title: 'Utilisateur créé avec succès!',
+            text: `Code utilisateur: ${response.code}`, // Assuming the response contains a 'code' field
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.closeModal(); // Fermer le modal après la soumission
+          });
         }
       ).catch(
         error => {
           console.error('Erreur lors de la soumission du formulaire:', error);
-          alert('Erreur lors de la soumission du formulaire.');
+          Swal.fire({
+            title: 'Erreur',
+            text: 'Erreur lors de la soumission du formulaire.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
         }
       );
     }

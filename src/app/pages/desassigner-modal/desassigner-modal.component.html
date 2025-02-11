@@ -1,0 +1,13 @@
+<div (click)="$event.stopPropagation()" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <span>&#10060;</span>
+      </div>
+      <p>Êtes-vous sûr de vouloir désassigner la carte à cet utilisateur ?</p>
+      <div class="modal-buttons">
+        <button class="btn confirm" (click)="confirmDesassign()">Confirmer</button>
+        <button class="btn cancel" (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+  

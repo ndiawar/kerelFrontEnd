@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userService.logout().then(
       response => {
         console.log('Logout successful:', response);
+        localStorage.removeItem('user'); // Removes the 'user' item from localStorage
         this.router.navigate(['/login']); // Redirige vers la page de login
       }
     ).catch(

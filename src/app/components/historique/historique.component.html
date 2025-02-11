@@ -15,7 +15,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>ID de l'utilisateur</th>
           <th>Nom</th>
           <th>Action effectuée</th>
           <th>Heure</th>
@@ -23,13 +23,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let action of filteredActions"> <!-- Utilisation de filteredActions -->
-          <td>{{ action.id }}</td>
-          <td>{{ action.name }}</td>
-          <td>{{ action.description }}</td>
-          <td>{{ action.time }}</td>
-          <td>{{ action.date | date:'fullDate' }}</td>
+        <tr *ngFor="let action of filteredActions | paginate: { itemsPerPage: nbItems, currentPage: p }"> <!-- Utilisation de filteredActions -->
+          <td>{{ action.user_id }}</td>
+          <td>{{ action.prenom }} {{ action.nom }}</td>
+          <td>{{ action.Action }}</td>
+          <td>{{ formatTime(action.created_at) }}</td>
+          <td>{{ formatDate(action.created_at) }}</td>
         </tr>
       </tbody>
     </table>
+
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
   </div>

@@ -19,11 +19,11 @@ export class LoginKerelEcoComponent implements OnInit {
   showInputs = false; // Contrôle l'affichage des inputs
   showError = false; // Contrôle l'affichage du message d'erreur
   showError2 = false;
+  errorMessage: string = '';
 
   constructor(private apiService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.apiService.initializeWebSocket(); // Initialiser la connexion WebSocket
     this.listenToWebSocket(); // Écouter les messages WebSocket
   }
 
@@ -119,6 +119,7 @@ export class LoginKerelEcoComponent implements OnInit {
           // Supposons que la réponse indique une authentification réussie
           console.log('Login response:', response);
           this.apiService.saveToken(response.token);
+          this.apiService.setUserData(response.user);
           if (response) {
             // Redirection vers le tableau de bord
             this.router.navigate(['/dashboard']);
@@ -165,15 +166,19 @@ export class LoginKerelEcoComponent implements OnInit {
   listenToWebSocket(): void {
     const ws = new WebSocket('ws://localhost:3004');
     ws.onmessage = (event) => {
-      const scannedCard = event.data;
+
+      if (event.data !== '') 
+      {
+        const scannedCard = event.data;
       console.log('Carte scannée:', scannedCard);
       this.handleRFIDLogin(scannedCard);
+    }
   }}
 
   private handleRFIDLogin(rfidCardId: string): void {
     this.apiService.loginByCard(rfidCardId).then(
         response => {
-          if(response.token){
+          if(response.token !== null){
             this.router.navigate(['/dashboard']);
           }
         
@@ -181,6 +186,7 @@ export class LoginKerelEcoComponent implements OnInit {
       error => {
         // Gérer les erreurs de la requête
         console.error('Login failed:', error);
+        this.errorMessage = 'Login failed: ' + (error.message || 'Unknown error');
       }
     );;
 }

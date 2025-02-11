@@ -32,11 +32,11 @@ const wss = new WebSocket.Server({ port: 3004 });
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-  ws.on('message', (message) => {
-    console.log('Received:', message);
-    // Echo the received message back to the client
-    ws.send(`Server received: ${message}`);
-  });
+  // ws.on('message', (message) => {
+  //   console.log('Received:', message);
+  //   // Echo the received message back to the client
+  //   ws.send(`${message}`);
+  // });
 
   ws.on('close', () => {
     console.log('Client disconnected');
@@ -47,7 +47,7 @@ wss.on('connection', (ws) => {
   });
 
   // Send a welcome message to the client
-  ws.send('Welcome to the WebSocket server');
+  // ws.send('Welcome to the WebSocket server');
 });
 
 console.log('WebSocket server is running on ws://localhost:3004');

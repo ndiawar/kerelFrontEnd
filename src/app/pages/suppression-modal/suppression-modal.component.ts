@@ -1,3 +1,4 @@
+import { NgIf } from "@angular/common";
 import { UserService } from "../../services/UserServices";
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 
@@ -27,7 +28,7 @@ export class SuppressionModalComponent {
       this.userService.deleteUtilisateur(this.userId).then(
         (response) => {
           console.log('Utilisateur supprimé avec succès:', response);
-          this.confirm.emit();
+          this.cancel.emit();
         },
         (error) => {
           console.error('Erreur lors de la suppression de l\'utilisateur:', error);
@@ -37,7 +38,16 @@ export class SuppressionModalComponent {
   }
 }
 
+open() {
+  this.showModal = true;
+}
+
+close() {
+  this.showModal = false;
+}
+
   onCancel() {
-    this.confirm.emit();
+    this.cancel.emit();
+    this.showModal = false;
   }
 }

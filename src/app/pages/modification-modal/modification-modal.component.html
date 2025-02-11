@@ -40,8 +40,8 @@
     </div>
 
     <div class="form-group">
-      <label for="numeroCarte">Email<span>*</span></label>
-      <input type="email" id="numeroCarte" name="numeroCarte" [(ngModel)]="user.email" required 
+      <label for="numeroCarte">Email</label>
+      <input type="email" id="numeroCarte" name="numeroCarte" [(ngModel)]="user.email" 
              pattern="^[A-Za-z]{2,}@[A-Za-z]+\.[A-Za-z]{1,}$" 
              #numeroCarte="ngModel"
              (input)="numeroCarte.control.markAsTouched()">
