@@ -5,6 +5,7 @@ import { UserService } from '../../services/UserServices';
 import Swal from 'sweetalert2';
 
 
+
 @Component({
   selector: 'app-inscription-modal',
   standalone: true,
