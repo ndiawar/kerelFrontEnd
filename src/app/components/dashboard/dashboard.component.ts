@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   metrics = [
     { icon: '🌊', title: 'Volume Eau', value: '...', unit: 'Litre (L)' },
     { icon: '💧', title: 'Humidité', value: '...', unit: '%HR' },
-    { icon: '🌱', title: 'pH du sol', value: '...', unit: 'Agriculture' },
+    { icon: '🌱', title: 'Taux Humidité Sol', value: '...', unit: 'Agriculture' },
     { icon: '🌡️', title: 'Temp.', value: '...', unit: 'Celsius (°C)' }
   ];
 
@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   humidity: number = 0;
 
   temperature_sensor: number | null = null;
-  ph: number | null = null;
+  soilMoisture: number | null = null;
   humidity_sensor: number | null = null;
   waterVolume: number | null = null;
 
@@ -161,7 +161,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sensorService.getSensorData().subscribe(
       (data) => {
         this.temperature_sensor = data.temperature || null;
-        this.ph = data.ph || null;
+        this.soilMoisture = data.soilMoisture || null;
         this.humidity_sensor = data.humidity || null;
         this.waterVolume = data.waterLevel || null;
 
@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.metrics = [
       { icon: '🌊', title: 'Volume Eau', value: this.waterVolume !== null ? `${this.waterVolume} L` : '...', unit: 'Litre (L)' },
       { icon: '💧', title: 'Humidité', value: this.humidity_sensor !== null ? `${this.humidity_sensor} %` : '...', unit: '%HR' },
-      { icon: '🌱', title: 'pH du sol', value: this.ph !== null ? `${this.ph}` : '...', unit: 'Agriculture' },
+      { icon: '🌱', title: 'Taux humidité du sol', value: this.soilMoisture !== null ? `${this.soilMoisture} %` : '...', unit: 'Agriculture' },
       { icon: '🌡️', title: 'Temp.', value: this.temperature_sensor !== null ? `${this.temperature_sensor}°C` : '...', unit: 'Celsius (°C)' }
     ];
   }

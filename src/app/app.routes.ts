@@ -5,6 +5,7 @@ import { HistoriqueComponent } from './components/historique/historique.componen
 import { ArrosageComponent } from './components/arrosage/arrosage.component'
 import { UserListComponent } from './components/user-list/user-list.component';
 import { LoginKerelEcoComponent } from './pages/login-kerel-eco/login-kerel-eco.component';
+import { AuthGuard } from './guards/auth.guard';
 
 
 
@@ -12,11 +13,11 @@ import { LoginKerelEcoComponent } from './pages/login-kerel-eco/login-kerel-eco.
 export const routes: Routes = [
     { path: '', component: LoginKerelEcoComponent },
     { path: 'login', component: LoginKerelEcoComponent },
-    { path: 'dashboard', component: DashboardComponent },
-    { path: 'utilisateurs', component: UtilisateursComponent },
-    { path: 'User-list', component: UserListComponent },
-    { path: 'historique', component: HistoriqueComponent },
-    { path: 'arrosage', component: ArrosageComponent },
-    { path: 'historique', component: HistoriqueComponent },
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'utilisateurs', component: UtilisateursComponent, canActivate: [AuthGuard] },
+    { path: 'User-list', component: UserListComponent, canActivate: [AuthGuard] },
+    { path: 'historique', component: HistoriqueComponent, canActivate: [AuthGuard] },
+    { path: 'arrosage', component: ArrosageComponent, canActivate: [AuthGuard] },
+    { path: 'historique', component: HistoriqueComponent, canActivate: [AuthGuard] },
     { path: '**', redirectTo: '' }
 ];

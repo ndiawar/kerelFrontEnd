@@ -21,6 +21,7 @@ export class LoginKerelEcoComponent implements OnInit {
   showError2 = false;
   errorMessage: string = '';
 
+
   constructor(private apiService: UserService, private router: Router) { }
 
   ngOnInit(): void {
@@ -179,6 +180,7 @@ export class LoginKerelEcoComponent implements OnInit {
     this.apiService.loginByCard(rfidCardId).then(
         response => {
           if(response.token !== null){
+            this.apiService.saveToken(response.token);
             this.router.navigate(['/dashboard']);
           }
         

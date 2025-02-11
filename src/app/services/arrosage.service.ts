@@ -81,25 +81,25 @@ export class ArrosageService {
   // Mettre à jour une programmation d'arrosage
   async updateArrosage(arrosage: any) {
     const today = new Date().toISOString().split('T')[0];
-
+  
     if (arrosage.date < today) {
       throw new Error("La date choisie est antérieure à aujourd'hui.");
     }
-
+  
     const payload: { [key: string]: any } = {
       typePlante: arrosage.type,
       heureMatin: arrosage.morning,
       heureSoir: arrosage.evening,
       quantiteEau: arrosage.water
     };
-
+  
     // Supprime les champs non définis
     Object.keys(payload).forEach(key => {
       if (payload[key] === undefined) {
         delete payload[key];
       }
     });
-
+  
     try {
       const response = await axios.put(`${this.apiUrl}/${arrosage.id}`, payload);
       return response.data;
@@ -108,5 +108,6 @@ export class ArrosageService {
       throw error;
     }
   }
+  
 
 }

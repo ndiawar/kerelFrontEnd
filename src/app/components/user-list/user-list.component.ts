@@ -91,6 +91,7 @@ export class UserListComponent implements OnInit{
   closeModalUnassign(): void {
     this.isModalUnassignOpen = false;
     this.selectedUserId = null;
+    this.loadUsers();
   }
 
   handleAssignButtonClick(userId: number, assignation: string): void {
@@ -107,6 +108,7 @@ export class UserListComponent implements OnInit{
 
   closeModal(): void {
     this.isModalOpen = false;
+    this.loadUsers();
   }
 
   hasSelectedUsers(): boolean {
@@ -126,6 +128,7 @@ export class UserListComponent implements OnInit{
       this.users = this.users.filter(user => !user.selected);
       this.filteredUsers = [...this.users];
       this.selectAllChecked = false;
+      this.loadUsers();
     }).catch(error => {
       console.error('Erreur lors de la suppression des utilisateurs:', error);
     });
@@ -157,6 +160,7 @@ export class UserListComponent implements OnInit{
   closeModalM(): void {
     this.isModalMOpen = false;
     this.selectedUserId = null;
+    this.loadUsers();
   }
 
   openModalS(userId: number): void {
@@ -167,6 +171,7 @@ export class UserListComponent implements OnInit{
   closeModalS(): void {
     this.isModalSOpen = false;
     this.selectedUserId = null;
+    this.loadUsers();
   }
 
   openModalB(userId: number): void {
@@ -188,5 +193,6 @@ export class UserListComponent implements OnInit{
   closeModalA(): void {
     this.isModalAOpen = false;
     this.selectedUserId = null;
+    this.loadUsers();
   }
 }

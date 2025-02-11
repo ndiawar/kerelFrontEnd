@@ -1,69 +1,39 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importez CommonModule
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/UserServices';
 
 @Component({
   selector: 'app-log-accordion',
   templateUrl: './log-accordion.component.html',
   styleUrls: ['./log-accordion.component.css'],
   standalone: true,
-  imports: [CommonModule], // Ajoutez CommonModule ici
+  imports: [CommonModule],
 })
-export class LogAccordionComponent {
-  items = [
-    {
-      title: 'Yaye Fatou Kane',
-      content: 'Inscrit un utilisateur',
-      details: ['Ouvert les vannes arrossage', 'Consulter Température'],
-      open: false
-    },
-    {
-      title: 'Oumou Khairy Ndiaye',
-      content: 'Inscrit un utilisateur',
-      details: ['Ouvert les vannes arrossage', 'Consulter Température'],
-      open: false
-    },
-    {
-      title: 'Ndiawar Diop',
-      content: 'Inscrit un utilisateur',
-      details: ['Ouvert les vannes arrossage', 'Consulter Température'],
-      open: false
-    },
-    {
-      title: 'Abdoul Rahmane Sow',
-      content: 'Inscrit un utilisateur',
-      details: ['Ouvert les vannes arrossage', 'Consulter Température'],
-      open: false
-    },
-    // Ajoutez plus d'éléments pour tester la pagination
-    {
-      title: 'Item 5',
-      content: 'Content 5',
-      details: ['Detail 5-1', 'Detail 5-2'],
-      open: false
-    },
-    {
-      title: 'Item 6',
-      content: 'Content 6',
-      details: ['Detail 6-1', 'Detail 6-2'],
-      open: false
-    },
-    {
-      title: 'Item 7',
-      content: 'Content 7',
-      details: ['Detail 7-1', 'Detail 7-2'],
-      open: false
-    },
-    {
-      title: 'Item 8',
-      content: 'Content 8',
-      details: ['Detail 8-1', 'Detail 8-2'],
-      open: false
-    },
-  ];
+export class LogAccordionComponent implements OnInit {
+  items: any[] = [];
+  colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF'];
+  itemsPerPage = 4;
+  currentPage = 1;
 
-  colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF']; // Tableau de couleurs
-  itemsPerPage = 4; // Nombre d'éléments par page
-  currentPage = 1; // Page actuelle
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.getHistorique();
+  }
+
+  getHistorique(): void {
+    this.userService.getHistoric().then(
+      (response) => {
+        this.items = response.map((item: any) => ({
+          ...item,
+          open: false
+        }));
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de l\'historique:', error);
+      }
+    );
+  }
 
   get paginatedItems() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -82,5 +52,15 @@ export class LogAccordionComponent {
 
   toggleItem(index: number) {
     this.paginatedItems[index].open = !this.paginatedItems[index].open;
+  }
+
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric'};
+    return new Date(date).toLocaleDateString('fr-FR', options);
+  }
+
+  formatTime(date: string): string {
+    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return new Date(date).toLocaleTimeString('fr-FR', options);
   }
 }

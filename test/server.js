@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 const { SerialPort } = require('serialport'); // Pour gérer la communication série
 const { ReadlineParser } = require('@serialport/parser-readline');
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 }, (err) => {
+const port = new SerialPort({ path: '/dev/ttyACM1', baudRate: 9600 }, (err) => {
     if (err) {
         return console.error('Error opening serial port:', err.message);
     }

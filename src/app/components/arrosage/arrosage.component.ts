@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ArrosageService } from '../../services/arrosage.service';
 
-type PlantType = 'tropicales' | 'maraicheres' | 'legumineuses' | 'cereales';
+type PlantType = 'tropicales' | 'maraicheres' | 'legumineuses' | 'cereales' | 'autres';
 
 export interface Plant {
-  id?: string; // Ajoutez cette ligne
+  id?: string;
   type?: PlantType;
   morning?: string;
   evening?: string;
   water?: number;
   date?: string;
+  otherType?: string;
 }
 
 @Component({
@@ -25,96 +26,21 @@ export class ArrosageComponent implements OnInit {
   today: string = new Date().toISOString().split('T')[0];
   newPlant: Plant = {
     date: this.today,
-    type: undefined // Initialisation de type
+    type: undefined
   };
 
   plants: Plant[] = [];
   page: number = 1;
   pageSize: number = 2;
-  errorMessage: string = ''; // Propriété pour le message d'erreur
+  errorMessage: string = '';
+  morningError: string = '';
+  eveningError: string = '';
+
+  plantTypes: PlantType[] = ['tropicales', 'maraicheres', 'legumineuses', 'cereales', 'autres'];
 
   constructor(private arrosageService: ArrosageService) {}
 
-  async ngOnInit() {
-    await this.loadArrosages(); // Charger les arrosages lors de l'initialisation
-  }
 
-  async loadArrosages() {
-    try {
-      this.plants = await this.arrosageService.getAllArrosages();
-      console.log('Données chargées :', this.plants);
-    } catch (error) {
-      console.error('Erreur lors du chargement des arrosages', error);
-    }
-  }async submitPlant() {
-    const { date, ...dataWithoutDate } = this.newPlant;
-
-    try {
-      if (this.newPlant.id) { // Si l'ID existe, c'est une mise à jour
-        const response = await this.arrosageService.updateArrosage(this.newPlant);
-        this.plants = this.plants.map(p => p.id === response.arrosage._id ? response.arrosage : p);
-      } else { // Sinon, c'est un ajout
-        const response = await this.arrosageService.ajouterArrosage(this.newPlant);
-        this.plants.push(response);
-      }
-
-      this.newPlant = { date: this.today }; // Réinitialiser newPlant
-      this.errorMessage = ''; // Réinitialiser le message d'erreur
-    } catch (error: any) { // Spécifier le type d'erreur
-      this.errorMessage = error.message; // Afficher l'erreur à l'utilisateur
-      console.error('Erreur lors de l’ajout ou de la mise à jour de la plante', error);
-    }
-  }
-
-
-  async addPlant() {
-    const { date, ...dataWithoutDate } = this.newPlant;
-
-    if (this.validateHours()) {
-      if (dataWithoutDate.type && dataWithoutDate.water !== undefined) {
-        try {
-          const response = await this.arrosageService.ajouterArrosage(this.newPlant);
-          this.plants.push(response);
-          this.newPlant = { date: this.today };
-          this.errorMessage = ''; // Réinitialiser le message d'erreur
-        } catch (error: any) { // Spécifier le type d'erreur
-          this.errorMessage = error.message; // Afficher l'erreur à l'utilisateur
-          console.error('Erreur lors de l’ajout de la plante', error);
-        }
-      }
-    } else {
-      this.errorMessage = 'Erreur sur la configuration de l\'heure, veuillez réessayer.';
-    }
-  }
-  validateHours(): boolean {
-    if (this.newPlant.morning && this.newPlant.evening) {
-      const morningHour = this.newPlant.morning;
-      const eveningHour = this.newPlant.evening;
-
-      const isValidMorningEvening = morningHour < eveningHour;
-      const isValidMorning = !(this.isBetween(morningHour, '15:00', '03:00'));
-      const isValidEvening = !(this.isBetween(eveningHour, '03:00', '15:00'));
-
-      return isValidMorningEvening && isValidMorning && isValidEvening;
-    }
-    return false;
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.plants.length / this.pageSize);
-  }
-
-  nextPage() {
-    if (this.page < this.totalPages) {
-      this.page++;
-    }
-  }
-
-  prevPage() {
-    if (this.page > 1) {
-      this.page--;
-    }
-  }
 
   isBetween(hour: string, start: string, end: string): boolean {
     if (start < end) {
@@ -134,7 +60,8 @@ export class ArrosageComponent implements OnInit {
     tropicales: 70,
     maraicheres: 60,
     legumineuses: 60,
-    cereales: 80
+    cereales: 80,
+    autres: 0
   };
 
   getHumidity(type: PlantType): number {
@@ -145,33 +72,107 @@ export class ArrosageComponent implements OnInit {
     return input ? input.charAt(0).toUpperCase() + input.slice(1) : '';
   }
 
-  onTypeChange(selectedType: PlantType) {
-    console.log('Type de plante sélectionné:', selectedType);
-    this.newPlant.type = selectedType;
+
+  // onTypeChange(selectedType: PlantType) {
+  //   this.newPlant.type = selectedType;
+  
+  //   // Si "autres" est sélectionné, réinitialiser la valeur de "otherType" à vide.
+  //   if (selectedType === 'autres') {
+  //     this.newPlant.otherType = '';  // Réinitialisation du champ "autres"
+  //   } else {
+  //     this.newPlant.otherType = undefined;  // Réinitialiser autre champ si un autre type est sélectionné
+  //   }
+  // }
+  editPlant(plant: Plant) {
+    this.newPlant = { ...plant };
   }
-
-  // Nouvelle méthode pour éditer une plante
- // Modifier la méthode editPlant pour permettre la mise à jour
- async editPlant(plant: Plant) {
-  this.newPlant = { ...plant }; // Remplir newPlant avec les données de la plante sélectionnée
-
-  try {
-    const updatedPlant = await this.arrosageService.updateArrosage(this.newPlant);
-    this.plants = this.plants.map(p => p.id === updatedPlant.arrosage._id ? updatedPlant.arrosage : p);
-  } catch (error: any) { // Spécifier le type d'erreur
-    console.error('Erreur lors de la mise à jour de la plante', error);
-  }
-}
-
-
-  // Nouvelle méthode pour supprimer une plante
 
   async deletePlant(plant: Plant) {
     try {
-      await this.arrosageService.supprimerArrosage(plant); // Suppression via le service
-      this.plants = this.plants.filter(p => p !== plant); // Retirer la plante de la liste
-    } catch (error: any) { // Spécifier le type d'erreur
+      await this.arrosageService.supprimerArrosage(plant);
+      this.plants = this.plants.filter(p => p !== plant);
+    } catch (error: any) {
       console.error('Erreur lors de la suppression de la plante', error);
     }
   }
+
+  async ngOnInit() {
+    await this.loadArrosages();
+  }
+
+  async loadArrosages() {
+    try {
+      this.plants = await this.arrosageService.getAllArrosages();
+    } catch (error) {
+      console.error('Erreur lors du chargement des arrosages', error);
+    }
+  }
+
+  validateHours(): boolean {
+    const morningHour = this.newPlant.morning || '';
+    const eveningHour = this.newPlant.evening || '';
+
+    this.morningError = '';
+    this.eveningError = '';
+
+    if (morningHour) {
+      if (morningHour >= '15:00') {
+        this.morningError = 'L\'heure du matin doit être avant 15h00.';
+      }
+    }
+
+    if (eveningHour) {
+      if (eveningHour < '15:00') {
+        this.eveningError = 'L\'heure du soir doit être après 15h00.';
+      }
+    }
+
+    return !this.morningError && !this.eveningError;
+  }
+
+  async submitPlant(form: NgForm) {
+    if (form.invalid || !this.validateHours()) {
+      return;
+    }
+
+    try {
+      if (this.newPlant.id) {
+        const response = await this.arrosageService.updateArrosage(this.newPlant);
+        this.plants = this.plants.map(p => p.id === response.arrosage._id ? response.arrosage : p);
+      } else {
+        const response = await this.arrosageService.ajouterArrosage(this.newPlant);
+        this.plants.push(response);
+      }
+      this.newPlant = { date: this.today };
+      this.errorMessage = '';
+    } catch (error: any) {
+      this.errorMessage = error.message;
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.plants.length / this.pageSize);
+  }
+
+  nextPage() {
+    if (this.page < this.totalPages) {
+      this.page++;
+    }
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+    }
+  }
+
+  onTypeChange(selectedType: PlantType) {
+    this.newPlant.type = selectedType;
+    this.newPlant.otherType = selectedType === 'autres' ? '' : undefined;
+  }
+
+  getSelectedPlantName(): string {
+    return this.newPlant.type === 'autres' ? this.newPlant.otherType || 'Autres (non précisé)' : this.capitalize(this.newPlant.type || '');
+  }
+
 }

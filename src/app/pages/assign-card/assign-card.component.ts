@@ -52,6 +52,7 @@ export class AssignCardComponent implements OnInit, OnDestroy{
       this.userService.assignRfidCode(this.userId, cardNumber).then(
         (response) => {
           console.log('Carte assignée avec succès:', response);
+          this.ngOnDestroy();
           Swal.fire({
             title: 'Carte assignée avec succès!',
             text: `Code utilisateur: ${response.user.code}`, // Assuming the response contains a 'user' object with a 'code' field
