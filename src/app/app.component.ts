@@ -4,9 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './pages/header/header.component';
 import { SidebarComponent } from './pages/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common'; // Pour *ngIf
-import { ArrosageService } from './services/arrosage.service';
 import { isPlatformBrowser } from '@angular/common';
-
 
 @Component({
   selector: 'app-root',
@@ -20,16 +18,14 @@ import { isPlatformBrowser } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   showLayout = true; // Affichage du header et sidebar
   title = 'KerelEcoFront';
   sidebarVisible = false;
-  statusMessage: string = 'Initialisation...';
 
   isBrowser: boolean;
 
   constructor(
-    private arrosageService: ArrosageService, 
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -41,15 +37,6 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  ngOnInit() {
-    if (this.isBrowser) {
-      // Démarrer la vérification APRÈS le rendu du navigateur
-      setTimeout(() => {
-        this.arrosageService.startArrosageCheck();
-      }, 2000);
-    }
-  }
-
 
   toggleSidebar(): void {
     this.sidebarVisible = !this.sidebarVisible;

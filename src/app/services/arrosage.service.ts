@@ -10,7 +10,6 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class ArrosageService {
   private apiUrl = 'http://localhost:3000/api/arrosage';
-  private flaskApiUrl = 'http://localhost:5002/pump';
 
   private arrosageStatus = new BehaviorSubject<string>('Vérification en cours...');
   arrosageStatus$ = this.arrosageStatus.asObservable();
@@ -110,58 +109,4 @@ export class ArrosageService {
     }
   }
 
- // Ajoute un délai d'attente et réessaie l'appel si nécessaire
-
- async verifierHeureProgrammee() {
-   if (!this.isBrowser) return;  // Ne pas exécuter sur le serveur
- 
-   try {
-     const response = await axios.get(`${this.apiUrl}/controle-heure`, { timeout: 5000 });  // Délai de 5 secondes
-     this.arrosageStatus.next(response.data.message);
- 
-     if (response.data.message === "Vérification de l'heure programmée effectuée.") {
-       await this.startPump();
-     }
-   } catch (error: unknown) {  // Typage explicite de l'erreur
-     if (axios.isAxiosError(error)) {  // Vérifie si l'erreur provient d'Axios
-       console.error("Erreur lors de la vérification de l'heure programmée :", error.message);
-       if (error.code === 'ECONNABORTED') {
-         console.log("Réessayer la vérification après un délai...");
-         setTimeout(() => this.verifierHeureProgrammee(), 10000);  // Réessayer après 10 secondes
-       }
-     } else {
-       console.error("Erreur inconnue :", error);  // Cas où l'erreur n'est pas liée à Axios
-     }
-   }
- }
- 
-
-  // Démarrer la pompe via l'API Flask
-  async startPump() {
-    if (!this.isBrowser) return; // ⚠️ Ne pas exécuter côté serveur
-
-    try {
-      await axios.post(`${this.flaskApiUrl}/start`);
-      this.arrosageStatus.next('Pompe activée 🚰');
-    } catch (error) {
-      console.error("Erreur lors du démarrage de la pompe :", error);
-    }
-  }
-
-  // **Démarre la vérification automatique après le rendu (CLIENT UNIQUEMENT)**
-  startArrosageCheck() {
-    if (this.isBrowser && !this.intervalId) {
-      this.intervalId = setInterval(() => {
-        this.verifierHeureProgrammee();
-      }, 60000);  // Vérification chaque minute
-    }
-  }
-
-  // Arrêter la vérification
-  stopArrosageCheck() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-  }
 }
