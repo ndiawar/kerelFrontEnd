@@ -29,6 +29,11 @@ export class UserService {
     return response.data;
   }
 
+  async getHistoric(): Promise<any> {
+    const response = await this.axiosInstance.get('/historique');
+    return response.data;
+  }
+
   private getTokenFromLocalStorage(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       return localStorage.getItem('token');
@@ -42,17 +47,32 @@ export class UserService {
   }
 
   async createUtilisateur(data: any): Promise<any> {
-    const response = await this.axiosInstance.post('/utilisateurs', data);
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.post('/utilisateurs', data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   }
 
   async updateUtilisateur(id: number, data: any): Promise<any> {
-    const response = await this.axiosInstance.put(`/utilisateurs/${id}`, data);
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.put(`/utilisateurs/${id}`, data, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   }
 
   async deleteUtilisateur(id: number): Promise<any> {
-    const response = await this.axiosInstance.delete(`/utilisateurs/${id}`);
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.delete(`/utilisateurs/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   }
 
@@ -73,12 +93,22 @@ export class UserService {
   }
 
   async bloquerUtilisateur(id: number): Promise<any> {
-    const response = await this.axiosInstance.put(`/utilisateurs/bloquer/${id}`);
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.put(`/utilisateurs/bloquer/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   }
 
   async debloquerUtilisateur(id: number): Promise<any> {
-    const response = await this.axiosInstance.put(`/utilisateurs/debloquer/${id}`);
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.put(`/utilisateurs/debloquer/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   }
 
@@ -114,12 +144,22 @@ async loginByCard(rfid_code: string): Promise<any> {
 }
 
 async assignRfidCode(id: number, rfid_code: string): Promise<any> {
-  const response = await this.axiosInstance.put(`/utilisateurs/assign/${id}`, { rfid_code });
+  const token = localStorage.getItem('token');
+  const response = await this.axiosInstance.put(`/utilisateurs/assign/${id}`, { rfid_code }, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
   return response.data;
 }
 
 async unassignRfidCode(id: number): Promise<any> {
-  const response = await this.axiosInstance.put(`/utilisateurs/desassign/${id}`);
+  const token = localStorage.getItem('token');
+  const response = await this.axiosInstance.put(`/utilisateurs/desassign/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
   return response.data;
 }
 

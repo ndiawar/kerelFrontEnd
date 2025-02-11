@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
+import { UserService } from '../../services/UserServices';
 
 @Component({
   selector: 'app-historique',
@@ -11,25 +12,40 @@ import { FormsModule } from '@angular/forms';
 })
 export class HistoriqueComponent {
   searchTerm: string = '';
-    actions = [
-      { id: 1, name: 'Abou Sow', description: 'a modifié un nouvel utilisateur', time: '9:00', date: new Date('2023-01-10') },
-      { id: 2, name: 'Ndiaye Diop', description: 'a bloqué un utilisateur', time: '4:59', date: new Date('2023-01-11') },
-      { id: 3, name: 'Oumar Ndiaye', description: 's\'est connecté', time: '1:15', date: new Date('2023-01-12') },
-      { id: 4, name: 'Yaye Kane', description: 'a fermé la vanne', time: '7:45', date: new Date('2023-01-13') },
-      { id: 5, name: 'Roam Research', description: 's\'est connecté', time: '9:32', date: new Date('2023-01-14') },
-      { id: 6, name: 'Ndiaye Diop', description: 's\'est déconnecté', time: '8:15', date: new Date('2023-01-15') },
-      { id: 7, name: 'Oumar Ndiaye', description: 's\'est déconnecté', time: '6:21', date: new Date('2023-01-16') },
-      { id: 8, name: 'Yaye Kane', description: 's\'est connecté', time: '12:51', date: new Date('2023-01-17') },
-    ];
-    get filteredActions() {
-      return this.actions.filter(action =>
-        action.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        action.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        this.formatDate(action.date).includes(this.searchTerm)
-      );
-    }
+  actions: any[] = [];
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.getHistorique();
+  }
+
+  getHistorique(): void {
+    this.userService.getHistoric().then(
+      (response) => {
+        this.actions = response;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de l\'historique:', error);
+      }
+    );
+  }
+  get filteredActions() {
+    return this.actions.filter(action =>
+      action.prenom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      action.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      action.Action.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      this.formatDate(action.created_at).includes(this.searchTerm)
+    );
+  }
   
-    formatDate(date: Date): string {
-      return date.toLocaleDateString(); // Format de date pour la comparaison
-    }
+  formatDate(date: string): string {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric'};
+    return new Date(date).toLocaleDateString('fr-FR', options); // Format de date pour la comparaison
+  }
+
+  formatTime(date: string): string {
+    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return new Date(date).toLocaleTimeString('fr-FR', options); // Format de l'heure pour la comparaison
+  }
 }
