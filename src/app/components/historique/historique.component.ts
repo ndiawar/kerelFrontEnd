@@ -2,17 +2,20 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { UserService } from '../../services/UserServices';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-historique',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule, NgxPaginationModule],
   templateUrl: './historique.component.html',
   styleUrl: './historique.component.css'
 })
 export class HistoriqueComponent {
   searchTerm: string = '';
   actions: any[] = [];
+  p = 1;
+  nbItems: number = 10;
 
   constructor(private userService: UserService) {}
 

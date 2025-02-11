@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let action of filteredActions"> <!-- Utilisation de filteredActions -->
+        <tr *ngFor="let action of filteredActions | paginate: { itemsPerPage: nbItems, currentPage: p }"> <!-- Utilisation de filteredActions -->
           <td>{{ action.user_id }}</td>
           <td>{{ action.prenom }} {{ action.nom }}</td>
           <td>{{ action.Action }}</td>
@@ -32,4 +32,7 @@
         </tr>
       </tbody>
     </table>
+
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
   </div>

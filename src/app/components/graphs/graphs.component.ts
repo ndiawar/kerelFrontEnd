@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
+import { SensorService } from '../../services/sensor.service';
+
 Chart.register(...registerables);
 
 @Component({
@@ -13,13 +15,29 @@ export class GraphsComponent implements OnInit, AfterViewInit {
   @ViewChild('dailyTemperatureChart') dailyTemperatureChart!: ElementRef;
   @ViewChild('annualHumidityChart') annualHumidityChart!: ElementRef;
 
-  private isBrowser: boolean = false;
+  private isBrowser: boolean;
+  private temperatureChart!: Chart;
+  private humidityChart!: Chart;
+  private temperatureData: number[] = [];
+  private humidityData: number[] = [];
+  private labels: string[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private sensorService: SensorService
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.isBrowser) {
+      setInterval(() => {
+        this.sensorService.getSensorData().subscribe(data => {
+          this.updateCharts(data);
+        });
+      }, 5000); // Rafraîchissement toutes les 5 secondes
+    }
+  }
 
   ngAfterViewInit(): void {
     if (this.isBrowser) {
@@ -29,13 +47,13 @@ export class GraphsComponent implements OnInit, AfterViewInit {
   }
 
   createDailyTemperatureChart(): void {
-    new Chart(this.dailyTemperatureChart.nativeElement, {
+    this.temperatureChart = new Chart(this.dailyTemperatureChart.nativeElement, {
       type: 'line',
       data: {
-        labels: ['12h', '13h', '14h', '15h', '16h', '17h', '18h'],
+        labels: this.labels,
         datasets: [{
           label: 'Température (°C)',
-          data: [15, 20, 25, 22, 18, 20, 24],
+          data: this.temperatureData,
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
           fill: false,
@@ -44,27 +62,25 @@ export class GraphsComponent implements OnInit, AfterViewInit {
       options: {
         responsive: true,
         scales: {
-          y: {
-            beginAtZero: true,
+          x: {
+            ticks: { autoSkip: true, maxTicksLimit: 10 },
+            title: { display: true, text: 'Temps' },
           },
+          y: { beginAtZero: true },
         },
-        plugins: {
-          legend: {
-            display: true,
-          },
-        },
-      },
+        plugins: { legend: { display: true } },
+      }
     });
   }
 
   createAnnualHumidityChart(): void {
-    new Chart(this.annualHumidityChart.nativeElement, {
+    this.humidityChart = new Chart(this.annualHumidityChart.nativeElement, {
       type: 'line',
       data: {
-        labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+        labels: this.labels,
         datasets: [{
           label: 'Humidité (%)',
-          data: [5, 8, 12, 15, 10, 13, 9],
+          data: this.humidityData,
           borderColor: 'rgba(153, 102, 255, 1)',
           borderWidth: 1,
           fill: false,
@@ -73,16 +89,28 @@ export class GraphsComponent implements OnInit, AfterViewInit {
       options: {
         responsive: true,
         scales: {
-          y: {
-            beginAtZero: true,
+          x: {
+            ticks: { autoSkip: true, maxTicksLimit: 10 },
+            title: { display: true, text: 'Temps' },
           },
+          y: { beginAtZero: true },
         },
-        plugins: {
-          legend: {
-            display: true,
-          },
-        },
-      },
+        plugins: { legend: { display: true } },
+      }
     });
+  }
+
+  updateCharts(data: any): void {
+    if (data.temperature !== undefined) {
+      this.temperatureData.push(data.temperature);
+      this.labels.push(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      this.temperatureChart.update();
+    }
+
+    if (data.humidity !== undefined) {
+      this.humidityData.push(data.humidity);
+      this.labels.push(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      this.humidityChart.update();
+    }
   }
 }

@@ -17,11 +17,5 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // Get the user from the local storage
-    //const user = this.userService.getUser();
-    // if (user) {
-    //   this.userRole = user.role;
-    // }
-    //console.log('User récupéré:', user);
   }
 }

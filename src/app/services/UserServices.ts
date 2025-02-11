@@ -34,6 +34,16 @@ export class UserService {
     return response.data;
   }
 
+  async getUserConnected(): Promise<any> {
+    const token = localStorage.getItem('token');
+    const response = await this.axiosInstance.get('/user/conected', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  }
+
   private getTokenFromLocalStorage(): string | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       return localStorage.getItem('token');
