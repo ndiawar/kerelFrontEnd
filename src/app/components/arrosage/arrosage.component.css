@@ -19,6 +19,10 @@
   color: #274C77;
 }
 
+.placeholder-select:invalid {
+  color: gray;
+}
+
   
   .form-group {
     margin-bottom: 1rem;

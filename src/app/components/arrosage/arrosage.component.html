@@ -1,41 +1,74 @@
 <div class="container-fluid bg-light min-vh-100 justify-content-center align-items-center">
     <div class="row justify-content-center">
       <!-- Formulaire col-6 -->
-     <div class="col-md-6 bg-light d-flex flex-column justify-content-center align-items-center p-3 mb-3">
-    <form class="card bg-light p-3 w-75 h-100 d-flex flex-column justify-content-center align-items-center" (ngSubmit)="submitPlant()" #plantForm="ngForm">
-      <!-- Champ pour la date -->
-      <div class="form-group mb-3 w-100">
-        <input type="date" class="form-control custom-input bg-white p-4 m-1" [(ngModel)]="newPlant.date" name="date" required placeholder="Choisissez la date" />
+      <div class="col-md-6 bg-light d-flex flex-column justify-content-center align-items-center p-3 mb-3">
+
+        <form class="card bg-light p-3 w-75 h-100 d-flex flex-column justify-content-center align-items-center"
+          (ngSubmit)="submitPlant(plantForm)" #plantForm="ngForm">
+
+          <!-- Champ pour la date -->
+          <div class="form-group mb-3 w-100">
+            <label for="date">Date</label>
+            <input type="date" id="date" class="form-control" [(ngModel)]="newPlant.date" name="date" required />
+          </div>
+
+          <!-- Sélecteur de type de plante -->
+          <div class="form-group mb-3 w-100">
+            <label for="plantType">Sélectionnez un type de plante :</label>
+            <select id="plantType" class="form-control" [(ngModel)]="newPlant.type" name="type" required
+                    (ngModelChange)="onTypeChange($event)">
+              <option value="" disabled>-- Sélectionnez un type de plante --</option>
+              <option *ngFor="let type of plantTypes" [value]="type">{{ capitalize(type) }}</option>
+            </select>
+
+            <!-- Champ pour "Autres" -->
+            <input *ngIf="newPlant.type === 'autres'" type="text" class="form-control mt-2"
+                  [(ngModel)]="newPlant.otherType" name="otherType"
+                  placeholder="Nom du type de plante" required />
+          </div>
+
+          <p *ngIf="newPlant.type">🌿 Plante sélectionnée : 
+            <strong>{{ getSelectedPlantName() }}</strong>
+          </p>
+
+          <!-- Heure du matin -->
+          <div class="form-group mb-3 w-100">
+            <label for="morning">Heure du matin</label>
+            <input type="time" id="morning" class="form-control" [(ngModel)]="newPlant.morning" name="morning" required
+                  (ngModelChange)="validateHours()" />
+            <small class="text-danger" *ngIf="morningError">{{ morningError }}</small>
+          </div>
+
+          <!-- Heure du soir -->
+          <div class="form-group mb-3 w-100">
+            <label for="evening">Heure du soir</label>
+            <input type="time" id="evening" class="form-control" [(ngModel)]="newPlant.evening" name="evening" required
+                  (ngModelChange)="validateHours()" />
+            <small class="text-danger" *ngIf="eveningError">{{ eveningError }}</small>
+          </div>
+
+          <!-- Message d'erreur général -->
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Quantité d'eau -->
+          <div class="form-group mb-3 w-100">
+            <label for="water">Quantité d'eau</label>
+            <input type="number" id="water" class="form-control"
+                  [(ngModel)]="newPlant.water" name="water" required
+                  placeholder="Quantité d'eau (litres)" />
+          </div>
+
+          <button type="submit" class="btn btn-primary w-75"
+                  [disabled]="plantForm.invalid || (newPlant.type === 'autres' && !newPlant.otherType)">
+            {{ newPlant.id ? 'Mettre à jour' : 'Programmer' }}
+          </button>
+        </form>
+
+
       </div>
-      <!-- Sélecteur de type de plante -->
-      <div class="form-group mb-3 w-100">
-        <select class="form-control custom-input bg-white p-4 m-1" [(ngModel)]="newPlant.type" name="type" required (ngModelChange)="onTypeChange($event)">
-          <option value="" disabled selected>Type de plante</option>
-          <option value="tropicales">Tropicales</option>
-          <option value="maraicheres">Maraîchères</option>
-          <option value="legumineuses">Légumineuses</option>
-          <option value="cereales">Céréalières</option>
-        </select>
-      </div>
-      <!-- Heure du matin -->
-      <div class="form-group mb-3 w-100">
-        <input type="time" class="form-control custom-input bg-white p-4 m-1" [(ngModel)]="newPlant.morning" name="morning" required placeholder="Heure du matin" />
-      </div>
-      <!-- Heure du soir -->
-      <div class="form-group mb-3 w-100">
-        <input type="time" class="form-control custom-input bg-white p-4 m-1" [(ngModel)]="newPlant.evening" name="evening" placeholder="Heure du soir" />
-      </div>
-      <!-- Message d'erreur -->
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        {{ errorMessage }}
-      </div>
-      <!-- Quantité d'eau -->
-      <div class="form-group mb-3 w-100">
-        <input type="number" class="form-control custom-input bg-white p-4 m-1" [(ngModel)]="newPlant.water" name="water" required placeholder="Quantité d'eau (litres)" />
-      </div>
-      <button type="submit" class="btn btn-primary w-75" [disabled]="plantForm.invalid">{{ newPlant.id ? 'Mettre à jour' : 'Programmer' }}</button>
-    </form>
-  </div>
+      
   
       <!-- Cartes col-6 -->
       <div class="col-md-6 d-flex flex-column">
